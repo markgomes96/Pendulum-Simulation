@@ -1,7 +1,14 @@
 #include "includes.h"
 #include "globals.h"
-//#include "globals.cc"
+#include "globals.cc"
 #include "prototypes.h"
+
+/*
+*Draw frame rate to screen
+*Add vert struct to store wieght position
+*Add animation for wieght position
+*Connect animation to real physics
+*/
 
 void init(void) 
 {
@@ -26,8 +33,11 @@ int main(int argc, char** argv)
     glutInitWindowPosition (100, 100);
     glutCreateWindow (argv[0]);
     init ();
-    glutReshapeFunc(reshape); 
-    glutDisplayFunc(display); 
+    glutReshapeFunc(reshape);
+    glutDisplayFunc(display);
+    glutSpecialFunc(SpecialInput);
+    glutTimerFunc(0, checkFPS, 0);
+    glutIdleFunc(runanim);
     glutMainLoop();
     return 0;
 }

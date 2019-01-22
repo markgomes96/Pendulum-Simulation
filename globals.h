@@ -13,4 +13,9 @@ using namespace std;
 #define WINDOW_MAX_X 800
 #define WINDOW_MAX_Y 800
 
+extern float rotZ;
+extern float rotX;
+
+extern unsigned frames;
+
 #endif
