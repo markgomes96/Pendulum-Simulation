@@ -6,5 +6,9 @@
 #include <GL/glut.h>
 #include <stdio.h>
 #include <math.h>
+#include <string>
+#include <iostream>
+
+using namespace std;
 
 #endif

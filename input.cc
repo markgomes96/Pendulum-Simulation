@@ -31,3 +31,13 @@ void SpecialInput(int key, int x, int y)
 
 	glutPostRedisplay();
 }
+
+void keyboard( unsigned char key, int x, int y )
+{ 	
+	if ( key == 'q' || key == 'Q') 		//exit the program
+	{
+		printf("FARWELL, POWERING OFFFF...\n");
+		exit(0);
+	}
+	glutPostRedisplay();
+}

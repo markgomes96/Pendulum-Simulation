@@ -2,8 +2,7 @@
 #define INC_GLOBALS_H
 
 #include "includes.h"
-
-using namespace std;
+#include "struct.h"
 
 //Variables to specify window position 
 #define WINDOW_POS_X 100
@@ -13,9 +12,18 @@ using namespace std;
 #define WINDOW_MAX_X 800
 #define WINDOW_MAX_Y 800
 
-extern float rotZ;
+#define DFP "datafeed"
+
+extern float rotZ;	//rotation variables 
 extern float rotX;
 
-extern unsigned frames;
+extern unsigned frames;		//fps variables
+extern int oldTime;
+
+extern double t;				//datafeed variables
+extern double theta;
+extern double omega;
+
+extern vertex weightvert;
 
 #endif
