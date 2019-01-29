@@ -37,8 +37,6 @@ void display(void)
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glPolygonMode(GL_BACK, GL_FILL);
 
-	//glPushMatrix();
-
 	glColor3f(1.0, 0.0, 0.0);
 	glRotatef(45, 0, 0, 1);
 	glBegin ( GL_POLYGON );
@@ -47,8 +45,6 @@ void display(void)
 		glVertex3f ( -4.95, -4.95, 1 );
 		glVertex3f ( 4.95, -4.95, 1 );
 	glEnd();
-
-	//glPopMatrix();
 
 	glPopMatrix();
 
@@ -102,13 +98,97 @@ void display(void)
 	glLineWidth(5.0);
 
 	glColor3f (1.0, 0.0, 1.0);
-	//glTranslatef( 0.0, 0.0, -1.0);
 	glTranslated( weightvert.x, weightvert.y, weightvert.z);
 
 	gluSphere(gluNewQuadric(), 
 	     (GLdouble) 0.5,		//radius
 	     (GLint)     10,		//slices
 	     (GLint)     10 );		//stacks
+
+	glPopMatrix();
+
+	glPushMatrix();		//move cone man over to corner
+
+	glRotatef(rotZ, 0, 0, 1);
+    glRotatef(rotX, 1, 0, 0);
+	glTranslated( 0.0, 5.0, -0.5);
+
+	// Draw cone man for scale
+	glPushMatrix();
+	
+	glColor3f(1.0, 1.0, 0.0);
+	//glRotatef(rotZ, 0, 0, 1);
+	//glRotatef(rotX, 1, 0, 0);
+
+	glTranslated( 0, 0, 2.7);
+	gluSphere(gluNewQuadric(),				//head
+		(GLdouble) 0.5,			//radius
+		(GLint)		10,			//slice 
+		(GLint)		10 );		//stacks
+
+	glColor3f(0.5, 0, 0.5);
+	
+	glTranslated( 0, 0, -3.0);
+	gluCylinder(gluNewQuadric(),			//body
+        (GLdouble) 0.5,     	//base radius
+        (GLdouble) 1.0,     	//top radius
+        (GLdouble) 2.5,         //hieght
+        (GLint)      8,      	//slices
+        (GLint)     20 );       //stacks
+
+	glColor3f(0, 0.5, 0.5);
+
+	glTranslated( -0.25, -0.25, -1.7);				//right leg
+	gluCylinder(gluNewQuadric(),
+		(GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 2.0,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+
+	glTranslated( 0.5, 0.5, 0);                 //left leg
+    gluCylinder(gluNewQuadric(),
+        (GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 2.0,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+	
+	glPopMatrix();
+	
+	glPushMatrix();
+
+	//glRotatef(rotZ, 0, 0, 1);
+    //glRotatef(rotX, 1, 0, 0);
+	glRotatef( 20, 1, -1, 0);
+
+	glPushMatrix();
+	
+	glTranslated( 0.9, 0.9, -0.2);                 //right arm 
+    gluCylinder(gluNewQuadric(),
+        (GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 1.8,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+
+	glPopMatrix();
+
+	glRotatef( -40, 1, -1, 0);
+
+	glPushMatrix();
+
+	glTranslated( -0.9, -0.9, -0.2);                 //left arm
+    gluCylinder(gluNewQuadric(),
+        (GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 1.8,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+
+	glPopMatrix();
+
+	glPopMatrix();
 
 	glPopMatrix();
 
@@ -122,7 +202,7 @@ void runanim(void)
 	//printf("%f %f %f\n", t, theta, omega);
 
 	weightvert.x = 3 * sin(theta);
-	weightvert.z = (3 * -cos(theta)) + 3;
+	weightvert.z = (3 * -cos(theta)) + 4;
 
 	glutPostRedisplay();
 }
@@ -179,3 +259,4 @@ void drawString(GLuint x, GLuint y, void *font, const char* string)
 		glutBitmapCharacter(font, *c);
 	}
 }
+

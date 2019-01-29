@@ -11,7 +11,7 @@ unsigned frames = 0;		//fps variables
 int oldTime = 0;
 
 double t = 0.0;			//datafeed variables
-double theta = M_PI/4.0;
+double theta = M_PI-.01;
 double omega = 0.0;
 
 vertex weightvert = vertex(0.0, 0.0, 0.0, 1.0);
