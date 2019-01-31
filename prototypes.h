@@ -6,6 +6,7 @@ void runanim( void );
 void checkFPS( int );
 void showFPS( void );
 void drawString( GLuint , GLuint , void*, const char* );
+int sign( int );
 
 void SpecialInput( int , int , int );		//input.cc
 void keyboard( unsigned char , int , int );

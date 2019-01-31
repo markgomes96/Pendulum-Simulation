@@ -209,9 +209,9 @@ void runanim(void)
 
 void showFPS()
 {
-	static float fps;
+	static float fps;		//declare static will retain value between func calls
+	static float period;
 	
-	//declare static will retain value between func calls
 	frames++;
 	int currentTime=glutGet(GLUT_ELAPSED_TIME);
 
@@ -221,10 +221,32 @@ void showFPS()
 		oldTime = currentTime;
 		frames = 0;
 	}
+	
+	if(sign(omega) != sign(omegaPrev))
+	{
+		if(omegaChangeCount == 2)		//second omega change
+		{
+			period = ( (float)currentTime - (float)periodStartTime ) / 1000.0;	//get period in seconds
+			omegaChangeCount = 0;
+		}	
+		
+		if(omegaChangeCount == 1)		//first omega change
+		{
+			omegaPrev = omega;
+			omegaChangeCount++;
+		}
+
+		if(omegaChangeCount == 0)	//start period recording
+		{
+			periodStartTime = glutGet(GLUT_ELAPSED_TIME);
+			omegaPrev = omega;
+			omegaChangeCount++;
+		}
+	}
 
 	//define string to hold framerat 
-	char *charString = (char*) malloc(12*sizeof(char));
-	sprintf(charString, "FPS: %6.1f", fps);
+	char *charString = (char*) malloc(30*sizeof(char));
+	sprintf(charString, "FPS: %6.1f  |  Period: %6.2f", fps, period);
 
 	//set up 2d projection
 	glMatrixMode(GL_PROJECTION);
@@ -238,7 +260,7 @@ void showFPS()
 	glLoadIdentity();
 	
 	glColor3f(255,255,0);
-	drawString(50, 50, GLUT_BITMAP_HELVETICA_12, charString);
+	drawString(25, 25, GLUT_BITMAP_HELVETICA_12, charString);
 
 	//move back to 3D space
 	glPopMatrix();
@@ -258,5 +280,10 @@ void drawString(GLuint x, GLuint y, void *font, const char* string)
 	{
 		glutBitmapCharacter(font, *c);
 	}
+}
+
+int sign(int n)
+{
+	return (n > 0) ? 1 : ((n < 0) ? -1 : 0);
 }
 

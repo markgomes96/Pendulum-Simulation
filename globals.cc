@@ -10,8 +10,12 @@ float rotX = 0;
 unsigned frames = 0;		//fps variables
 int oldTime = 0;
 
+int periodStartTime = 0;		//period variables
+double omegaPrev = 0;
+int omegaChangeCount = 0;
+
 double t = 0.0;			//datafeed variables
-double theta = M_PI-.01;
+double theta = M_PI/2;
 double omega = 0.0;
 
 vertex weightvert = vertex(0.0, 0.0, 0.0, 1.0);
