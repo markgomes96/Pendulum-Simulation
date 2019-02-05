@@ -19,6 +19,7 @@ extern float rotX;
 
 extern unsigned frames;		//fps variables
 extern int oldTime;
+extern float fps;
 
 extern int periodStartTime;		//period variables
 extern double omegaPrev;
@@ -26,6 +27,7 @@ extern int omegaChangeCount;
 //extern double Nstep;
 extern int prevTime;
 extern float scalefactor;
+extern float period;
 
 extern double t;				//datafeed variables
 extern double theta;

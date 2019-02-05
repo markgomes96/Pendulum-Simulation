@@ -194,9 +194,12 @@ void display(void)
 
 void runanim(void)
 {
-	int currentTime=glutGet(GLUT_ELAPSED_TIME);
+	int currentTime = glutGet(GLUT_ELAPSED_TIME);
+	static float delay;
 
-	if(currentTime - prevTime > (18*scalefactor))
+	//delay = (900/fps);
+
+	if(currentTime - prevTime >= (17*scalefactor))
 	{
 		step( &t, &theta, &omega /*, Nstep*/);
 		prevTime = currentTime;
@@ -210,11 +213,8 @@ void runanim(void)
 
 void showFPS()
 {
-	static float fps;		//declare static will retain value between func calls
-	static float period;
-
 	frames++;
-	int currentTime=glutGet(GLUT_ELAPSED_TIME);
+	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 
 	if(currentTime - oldTime > 1000)
 	{

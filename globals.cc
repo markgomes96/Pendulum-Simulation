@@ -8,6 +8,7 @@ float rotZ = 90;			//rotation variables
 float rotX = 0;
 
 unsigned frames = 0;		//fps variables
+float fps = 0.0;
 int oldTime = 0;
 
 int periodStartTime = 0;		//period variables
@@ -16,6 +17,7 @@ int omegaChangeCount = 0;
 //double Nstep = 0.0;
 int prevTime = 0;
 float scalefactor = 1.0;
+float period = 0.0;
 
 double t = 0.0;			//datafeed variables
 double theta = M_PI/4;
