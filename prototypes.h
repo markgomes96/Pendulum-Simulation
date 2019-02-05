@@ -13,7 +13,7 @@ void keyboard( unsigned char , int , int );
 
 double thetadot( double , double , double );
 double omegadot( double , double , double );
-void step( double* , double* , double* );
+void step( double* , double* , double* /*, double*/ );
 
 int main( int , char** );		//main.cc
 void reshape ( int , int );

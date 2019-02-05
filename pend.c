@@ -35,7 +35,7 @@ double omegadot(double t, double theta, double omega)
 
 // This is the function that actually propagates the motion 
 
-void step(double *t, double *theta, double *omega )
+void step(double *t, double *theta, double *omega /*, double Nstep*/)
 {
 	// Time step variables
 	double dt, h; 

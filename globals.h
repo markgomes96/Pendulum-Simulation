@@ -23,6 +23,8 @@ extern int oldTime;
 extern int periodStartTime;		//period variables
 extern double omegaPrev;
 extern int omegaChangeCount;
+//extern double Nstep;
+extern int prevTime;
 
 extern double t;				//datafeed variables
 extern double theta;

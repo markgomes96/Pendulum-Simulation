@@ -110,7 +110,7 @@ void display(void)
 	glPushMatrix();		//move cone man over to corner
 
 	glRotatef(rotZ, 0, 0, 1);
-    glRotatef(rotX, 1, 0, 0);
+    	glRotatef(rotX, 1, 0, 0);
 	glTranslated( 0.0, 5.0, -0.5);
 
 	// Draw cone man for scale
@@ -147,7 +147,7 @@ void display(void)
         (GLint)     20 );       //stacks
 
 	glTranslated( 0.5, 0.5, 0);                 //left leg
-    gluCylinder(gluNewQuadric(),
+    	gluCylinder(gluNewQuadric(),
         (GLdouble) 0.1,         //base radius
         (GLdouble) 0.25,         //top radius
         (GLdouble) 2.0,         //hieght
@@ -198,7 +198,14 @@ void display(void)
 
 void runanim(void)
 {
-	step( &t, &theta, &omega);
+	int currentTime=glutGet(GLUT_ELAPSED_TIME);
+
+	if(currentTime - prevTime > 18)
+	{
+		step( &t, &theta, &omega /*, Nstep*/);
+		prevTime = currentTime;
+	}
+
 	//printf("%f %f %f\n", t, theta, omega);
 
 	weightvert.x = 3 * sin(theta);
@@ -211,7 +218,7 @@ void showFPS()
 {
 	static float fps;		//declare static will retain value between func calls
 	static float period;
-	
+
 	frames++;
 	int currentTime=glutGet(GLUT_ELAPSED_TIME);
 
@@ -220,6 +227,8 @@ void showFPS()
 		fps = frames*1000.0/(currentTime-oldTime);
 		oldTime = currentTime;
 		frames = 0;
+
+		//Nstep = (fps*10000.0)/0.52;
 	}
 	
 	if(sign(omega) != sign(omegaPrev))
@@ -242,7 +251,7 @@ void showFPS()
 			omegaPrev = omega;
 			omegaChangeCount++;
 		}
-	}
+	}	
 
 	//define string to hold framerat 
 	char *charString = (char*) malloc(30*sizeof(char));
