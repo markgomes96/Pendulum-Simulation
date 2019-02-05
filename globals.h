@@ -25,6 +25,7 @@ extern double omegaPrev;
 extern int omegaChangeCount;
 //extern double Nstep;
 extern int prevTime;
+extern float scalefactor;
 
 extern double t;				//datafeed variables
 extern double theta;

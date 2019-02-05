@@ -117,8 +117,6 @@ void display(void)
 	glPushMatrix();
 	
 	glColor3f(1.0, 1.0, 0.0);
-	//glRotatef(rotZ, 0, 0, 1);
-	//glRotatef(rotX, 1, 0, 0);
 
 	glTranslated( 0, 0, 2.7);
 	gluSphere(gluNewQuadric(),				//head
@@ -158,8 +156,6 @@ void display(void)
 	
 	glPushMatrix();
 
-	//glRotatef(rotZ, 0, 0, 1);
-    //glRotatef(rotX, 1, 0, 0);
 	glRotatef( 20, 1, -1, 0);
 
 	glPushMatrix();
@@ -200,13 +196,11 @@ void runanim(void)
 {
 	int currentTime=glutGet(GLUT_ELAPSED_TIME);
 
-	if(currentTime - prevTime > 18)
+	if(currentTime - prevTime > (18*scalefactor))
 	{
 		step( &t, &theta, &omega /*, Nstep*/);
 		prevTime = currentTime;
 	}
-
-	//printf("%f %f %f\n", t, theta, omega);
 
 	weightvert.x = 3 * sin(theta);
 	weightvert.z = (3 * -cos(theta)) + 4;

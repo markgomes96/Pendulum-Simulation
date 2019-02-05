@@ -27,6 +27,9 @@ void reshape (int w, int h)
 
 int main(int argc, char** argv)
 {
+	if(argc > 1)				//take in command line scaling factor
+		scalefactor = stof(argv[1]);
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
 	glutInitWindowSize (800, 800); 
