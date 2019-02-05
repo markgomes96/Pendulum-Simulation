@@ -19,6 +19,8 @@ int prevTime = 0;
 float scalefactor = 1.0;
 float period = 0.0;
 
+float fpp = 0.0;
+
 double t = 0.0;			//datafeed variables
 double theta = M_PI/4;
 double omega = 0.0;

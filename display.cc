@@ -194,16 +194,20 @@ void display(void)
 
 void runanim(void)
 {
+	/*
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
 	static float delay;
 
-	//delay = (900/fps);
+	delay = (900/fps);
 
 	if(currentTime - prevTime >= (17*scalefactor))
 	{
-		step( &t, &theta, &omega /*, Nstep*/);
+		step( &t, &theta, &omega, Nstep);
 		prevTime = currentTime;
 	}
+	*/
+
+	step( &t, &theta, &omega);
 
 	weightvert.x = 3 * sin(theta);
 	weightvert.z = (3 * -cos(theta)) + 4;
@@ -230,6 +234,9 @@ void showFPS()
 		if(omegaChangeCount == 2)		//second omega change
 		{
 			period = ( (float)currentTime - (float)periodStartTime ) / 1000.0;	//get period in seconds
+
+			fpp = fps * period;		//frames per period
+
 			omegaChangeCount = 0;
 		}	
 		
@@ -248,8 +255,9 @@ void showFPS()
 	}	
 
 	//define string to hold framerat 
-	char *charString = (char*) malloc(30*sizeof(char));
-	sprintf(charString, "FPS: %6.1f  |  Period: %6.2f", fps, period);
+	char *charString = (char*) malloc(45*sizeof(char));
+	sprintf(charString, "FPS: %6.1f  |  Period: %6.2f  |  FPP: %6.1f", fps, period, fpp);
+	
 
 	//set up 2d projection
 	glMatrixMode(GL_PROJECTION);

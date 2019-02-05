@@ -29,6 +29,8 @@ extern int prevTime;
 extern float scalefactor;
 extern float period;
 
+extern float fpp;
+
 extern double t;				//datafeed variables
 extern double theta;
 extern double omega;
