@@ -161,7 +161,7 @@ void display(void)
 	glPushMatrix();
 	
 	glTranslated( 0.9, 0.9, -0.2);                 //right arm 
-    gluCylinder(gluNewQuadric(),
+	gluCylinder(gluNewQuadric(),
         (GLdouble) 0.1,         //base radius
         (GLdouble) 0.25,         //top radius
         (GLdouble) 1.8,         //hieght
@@ -175,7 +175,7 @@ void display(void)
 	glPushMatrix();
 
 	glTranslated( -0.9, -0.9, -0.2);                 //left arm
-    gluCylinder(gluNewQuadric(),
+	gluCylinder(gluNewQuadric(),
         (GLdouble) 0.1,         //base radius
         (GLdouble) 0.25,         //top radius
         (GLdouble) 1.8,         //hieght
@@ -189,28 +189,18 @@ void display(void)
 	glPopMatrix();
 
 	showFPS();
+	
 	glutSwapBuffers();
 }
 
 void runanim(void)
 {
-	/*
-	int currentTime = glutGet(GLUT_ELAPSED_TIME);
-	static float delay;
-
-	delay = (900/fps);
-
-	if(currentTime - prevTime >= (17*scalefactor))
-	{
-		step( &t, &theta, &omega, Nstep);
-		prevTime = currentTime;
-	}
-	*/
-
-	step( &t, &theta, &omega);
+	step( &t, &theta, &omega, timeStep);
 
 	weightvert.x = 3 * sin(theta);
 	weightvert.z = (3 * -cos(theta)) + 4;
+
+	glutLockFrameRate(60.0);	//lock framerate at 60 fps
 
 	glutPostRedisplay();
 }
@@ -219,23 +209,25 @@ void showFPS()
 {
 	frames++;
 	int currentTime = glutGet(GLUT_ELAPSED_TIME);
-
-	if(currentTime - oldTime > 1000)
+	
+	if(currentTime - oldTime > 1000)		//handle fps
 	{
 		fps = frames*1000.0/(currentTime-oldTime);
 		oldTime = currentTime;
 		frames = 0;
 
-		//Nstep = (fps*10000.0)/0.52;
+		timeStep = (1.0 / fps) * scalefactor;		//calc physics time per frame
 	}
-	
-	if(sign(omega) != sign(omegaPrev))
+
+	if(sign(omega) != sign(omegaPrev))		//handle period, fpp
 	{
 		if(omegaChangeCount == 2)		//second omega change
 		{
 			period = ( (float)currentTime - (float)periodStartTime ) / 1000.0;	//get period in seconds
 
 			fpp = fps * period;		//frames per period
+
+			//frameWait = (1.0 / (fpp / 2.0)) * 1000;
 
 			omegaChangeCount = 0;
 		}	
@@ -248,7 +240,7 @@ void showFPS()
 
 		if(omegaChangeCount == 0)	//start period recording
 		{
-			periodStartTime = glutGet(GLUT_ELAPSED_TIME);
+			periodStartTime = currentTime;
 			omegaPrev = omega;
 			omegaChangeCount++;
 		}
@@ -282,6 +274,24 @@ void showFPS()
 	free(charString);
 }
 
+void glutSleep(int millisecondsToWait)
+{
+	int startTime = glutGet(GLUT_ELAPSED_TIME);
+
+	do{/*wait*/}
+	while((glutGet(GLUT_ELAPSED_TIME) - startTime) < millisecondsToWait);
+}
+
+void glutLockFrameRate(float desiredFrameRate)
+{
+	int millisecondsToWait = (int)((1.0 / desiredFrameRate) * 1000);
+	
+	int startTime = glutGet(GLUT_ELAPSED_TIME);
+
+	do{/*wait*/}
+	while((glutGet(GLUT_ELAPSED_TIME)-startTime) < millisecondsToWait);
+}
+
 void drawString(GLuint x, GLuint y, void *font, const char* string)
 {
 	const char *c;
@@ -293,7 +303,7 @@ void drawString(GLuint x, GLuint y, void *font, const char* string)
 	}
 }
 
-int sign(int n)
+int sign(double n)
 {
 	return (n > 0) ? 1 : ((n < 0) ? -1 : 0);
 }

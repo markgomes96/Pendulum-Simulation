@@ -24,12 +24,12 @@ extern float fps;
 extern int periodStartTime;		//period variables
 extern double omegaPrev;
 extern int omegaChangeCount;
-//extern double Nstep;
-extern int prevTime;
-extern float scalefactor;
 extern float period;
-
 extern float fpp;
+
+//extern float frameWait;
+extern double timeStep;
+extern float scalefactor;
 
 extern double t;				//datafeed variables
 extern double theta;

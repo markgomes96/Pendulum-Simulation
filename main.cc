@@ -1,3 +1,8 @@
+// Mark Gomes
+// Pendulum Project
+// CSC 415
+// 2/7/19
+
 #include "includes.h"
 #include "globals.h"
 #include "globals.cc"

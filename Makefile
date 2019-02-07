@@ -1,5 +1,5 @@
 CC = gcc
-C++ = g++ 
+C++ = g++
 LIBDIRS = -L/usr/lib64
 INCDIRS = -I/usr/include
 LDLIBS =  -lglut -lGL -lGLU -lX11 -lm
@@ -16,9 +16,6 @@ pendpoc: main.o $(INCLUDES) $(HEADERS) $(PROTOTYPES) $(OBJS)
 
 display.o : display.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
 	$(C++) -c display.cc
-
-#converter.o : converter.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
-#	$(C++) -c converter.cc
 
 input.o : input.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
 	$(C++) -c input.cc
