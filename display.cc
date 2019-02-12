@@ -200,7 +200,8 @@ void runanim(void)
 	weightvert.x = 3 * sin(theta);
 	weightvert.z = (3 * -cos(theta)) + 4;
 
-	glutLockFrameRate(60.0);	//lock framerate at 60 fps
+	if(inputFR != 0.0)
+		glutLockFrameRate(inputFR);	//lock framerate at 60 fps
 
 	glutPostRedisplay();
 }
@@ -215,8 +216,9 @@ void showFPS()
 		fps = frames*1000.0/(currentTime-oldTime);
 		oldTime = currentTime;
 		frames = 0;
-
-		timeStep = (1.0 / fps) * scalefactor;		//calc physics time per frame
+		
+		if(inputFR != 0.0)
+			timeStep = (1.0 / fps);		//calc physics time per frame
 	}
 
 	if(sign(omega) != sign(omegaPrev))		//handle period, fpp

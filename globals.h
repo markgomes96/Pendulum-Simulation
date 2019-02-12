@@ -29,7 +29,7 @@ extern float fpp;
 
 //extern float frameWait;
 extern double timeStep;
-extern float scalefactor;
+extern float inputFR;
 
 extern double t;				//datafeed variables
 extern double theta;

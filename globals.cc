@@ -19,7 +19,7 @@ float fpp = 0.0;
 
 //float frameWait = 0.0;
 double timeStep = 0.0;
-float scalefactor = 1.0;
+float inputFR = 0.0;
 
 double t = 0.0;			//datafeed variables
 double theta = M_PI/4;
