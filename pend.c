@@ -1,3 +1,6 @@
+#ifndef PEND
+#define PEND
+
 #include "includes.h"
 #include "prototypes.h"
 #include "globals.h"
@@ -60,3 +63,5 @@ void step(double *t, double *theta, double *omega , double timeStep)
 	*omega = *omega + h/6*(j1+2*j2+2*j3+j4);
 	*t = *t + h;
 }
+
+#endif

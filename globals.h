@@ -17,6 +17,9 @@
 extern float rotZ;	//rotation variables 
 extern float rotX;
 
+extern vect3 cameraPos;		//camera variables
+extern vect3 targetPos;
+
 extern unsigned frames;		//fps variables
 extern int oldTime;
 extern float fps;
@@ -27,7 +30,6 @@ extern int omegaChangeCount;
 extern float period;
 extern float fpp;
 
-//extern float frameWait;
 extern double timeStep;
 extern float inputFR;
 

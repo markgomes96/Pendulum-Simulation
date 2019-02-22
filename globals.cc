@@ -7,6 +7,9 @@
 float rotZ = 90;			//rotation variables 
 float rotX = 0;
 
+vect3 cameraPos = vect3(20.0, 2.0, 2.5);		//camera variables
+vect3 targetPos = vect3(0.0, 0.0, 0.0);
+
 unsigned frames = 0;		//fps variables
 float fps = 0.0;
 int oldTime = 0;
@@ -17,7 +20,6 @@ int omegaChangeCount = 0;
 float period = 0.0;
 float fpp = 0.0;
 
-//float frameWait = 0.0;
 double timeStep = 0.0;
 float inputFR = 0.0;
 

@@ -37,21 +37,26 @@ typedef struct colortype
 	}
 } colortype;
 
-typedef struct vector3D		//stores data for a 3D vector used for calcualtions
+typedef struct vect3		//stores data for a 3D vector used for calcualtions
 {
 	float x;
 	float y;
 	float z;
 
-	vector3D()
+	vect3()
 	{}
 
-	vector3D(float _x, float _y, float _z)
+	vect3(float _x, float _y, float _z)
 	{
 		x = _x;
 		y = _y;
 		z = _z;
 	}
-} vector3D;
+} vect3;
+
+typedef struct box {
+	vertex point[4];
+	colortype color;	
+} box;
 
 #endif

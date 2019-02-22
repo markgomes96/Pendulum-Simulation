@@ -7,7 +7,7 @@ LDLIBS =  -lglut -lGL -lGLU -lX11 -lm
 INCLUDES   = includes.h
 HEADERS    = globals.h struct.h
 PROTOTYPES = prototypes.h
-OBJS 	   = display.o input.o pend.o
+OBJS 	   = display.o boxy.o timephys.o input.o pend.o
 
 all : pendpoc
 
@@ -16,6 +16,12 @@ pendpoc: main.o $(INCLUDES) $(HEADERS) $(PROTOTYPES) $(OBJS)
 
 display.o : display.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
 	$(C++) -c display.cc
+
+boxy.o : boxy.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
+	$(C++) -c boxy.cc
+
+timephys.o : timephys.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
+	$(C++) -c timephys.cc
 
 input.o : input.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
 	$(C++) -c input.cc
