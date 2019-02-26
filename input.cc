@@ -6,38 +6,38 @@ void SpecialInput(int key, int x, int y)
 {
 	vect3 panCoord;
 
-	switch(key)		// moves the center point 5 pixels in inputed direction
+	switch(key)
 	{
 		case GLUT_KEY_UP:			// pan up
-			cout << "targetPos 1 : " << targetPos.x << " , " << targetPos.y << " , " << targetPos.z << endl;
-			cout << "DistVect : "    << .x << " , " << targetPos.y << " , " << targetPos.z << endl;
 			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
-			cout << "panCoord    : " << panCoord.x << " , " << panCoord.y << " , " << panCoord.z << endl;
-			panCoord.z = panCoord.z + 1.0;							// increment spherical
-			cout << "targetPos 2 : " << targetPos.x << " , " << targetPos.y << " , " << targetPos.z << endl;
-			targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
-			cout << "targetPos 2 : " << targetPos.x << " , " << targetPos.y << " , " << targetPos.z << endl;
+			panCoord.z = panCoord.z - 1.5;						// increment spherical
+			if(panCoord.z > 0)
+			{ 
+				targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
+			}
 		break;
 			
-/*
 		case GLUT_KEY_DOWN:			// pan down
-			panCoord = cartToSph(vectDist(cameraPos, targetPos));
-			panCoord.z = panCoord.z - 1.0;
-			targetPos = vectAdd(cameraPos, sphToCart(panCoord));
+			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
+			panCoord.z = panCoord.z + 1.5;						// increment spherical
+			if(panCoord.z < 180)
+			{ 
+				targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
+			}
 		break;
 
 		case GLUT_KEY_RIGHT:		// pan right
-			panCoord = cartToSph(vectDist(cameraPos, targetPos));
-			panCoord.z = panCoord.y + 1.0;
-			targetPos = vectAdd(cameraPos, sphToCart(panCoord));
+			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
+			panCoord.y = panCoord.y - 1.5;						// increment spherical
+			targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
 		break;
 			
 		case GLUT_KEY_LEFT:			// pan left
-			panCoord = cartToSph(vectDist(cameraPos, targetPos));
-			panCoord.z = panCoord.y - 1.0;
-			targetPos = vectAdd(cameraPos, sphToCart(panCoord));
+			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
+			panCoord.y = panCoord.y + 1.5;						// increment spherical
+			targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
 		break;
-*/
+
 		case GLUT_KEY_PAGE_UP:		// move up
 			cameraPos.z = cameraPos.z + 0.5;
 			targetPos.z = targetPos.z + 0.5;
@@ -93,8 +93,8 @@ vect3 cartToSph(vect3 a)
 {
 	vect3 sph;
 	sph.x = vectMagn(a);										// radius
-	sph.y = atan(a.y / a.x) * (180/M_PI);									// thetha
-	sph.z = atan( sqrt( (a.x*a.x) + (a.y*a.y) ) / a.z ) * (180/M_PI);		// phi
+	sph.y = atan2(a.y , a.x) * (180/M_PI);									// thetha
+	sph.z = atan2( sqrt( (a.x*a.x) + (a.y*a.y) ) , a.z ) * (180/M_PI);		// phi
 
 	return sph;
 }
