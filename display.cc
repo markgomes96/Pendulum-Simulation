@@ -32,8 +32,8 @@ void display(void)
 
 	glPushMatrix();
 
-	glRotatef(rotZ, 0, 0, 1);
-	glRotatef(rotX, 1, 0, 0);
+	//glRotatef(rotZ, 0, 0, 1);
+	//glRotatef(rotX, 1, 0, 0);
 
 	drawBox(&faces[0], vertex(0.0, 0.0, 2.0, 1.0));
 
@@ -43,8 +43,8 @@ void display(void)
 	glPushMatrix();
 
 	glColor3f (0.0,0.0,1.0);
-	glRotatef(rotZ, 0, 0, 1);
-	glRotatef(rotX, 1, 0, 0);
+	//glRotatef(rotZ, 0, 0, 1);
+	//glRotatef(rotX, 1, 0, 0);
 	glTranslatef(0.0, 0.0, -3.5);
 
 	gluCylinder(gluNewQuadric(), 
@@ -72,8 +72,8 @@ void display(void)
 	glPushMatrix();
 
 	glColor3f(0.0, 1.0, 0.0);
-	glRotatef(rotZ, 0, 0, 1);
-	glRotatef(rotX, 1, 0, 0);
+	//glRotatef(rotZ, 0, 0, 1);
+	//glRotatef(rotX, 1, 0, 0);
 	glTranslatef(-3.0, 3.0, -2.5);
 
 	gluCylinder(gluNewQuadric(), 
@@ -89,8 +89,9 @@ void display(void)
 	glPushMatrix();
 
 	glColor3f(0.0, 1.0, 0.0);
-	glRotatef(rotZ, 0, 0, 1);
-	glRotatef(90 + rotX, 1, 0, 0);
+	//glRotatef(rotZ, 0, 0, 1);
+	//glRotatef(90 + rotX, 1, 0, 0);
+	glRotatef(90, 1, 0, 0);
 	glRotatef(45, 0, 1, 0);
 	glTranslatef(0.0, 4.0, -4.4);
 
@@ -106,8 +107,8 @@ void display(void)
 	// Draw ball weight of pendulum 
 	glPushMatrix();
 
-	glRotatef(rotZ, 0, 0, 1);
-	glRotatef(rotX, 1, 0, 0);
+	//glRotatef(rotZ, 0, 0, 1);
+	//glRotatef(rotX, 1, 0, 0);
 	// Draw tether between weight and top
 	glLineWidth(5.0);
 	glColor3f(0.0, 1.0, 1.0);

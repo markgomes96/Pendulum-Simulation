@@ -25,6 +25,8 @@ int sign(double n);
 
 void SpecialInput( int , int , int );		//input.cc
 void keyboard( unsigned char , int , int );
+vect3 cartToSph(vect3 a);
+vect3 sphToCart(vect3 a);
 vect3 vectUnit( vect3 );
 vect3 vectDist( vect3 , vect3 );
 vect3 vectCross( vect3 , vect3 );

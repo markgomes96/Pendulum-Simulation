@@ -4,69 +4,109 @@
 
 void SpecialInput(int key, int x, int y)
 {
-	switch(key)		//moves the center point 5 pixels in inputed direction
+	vect3 panCoord;
+
+	switch(key)		// moves the center point 5 pixels in inputed direction
 	{
-		case GLUT_KEY_UP:
-			targetPos.z += 0.1;		//***quick fix ->improve by keeping same distance
+		case GLUT_KEY_UP:			// pan up
+			cout << "targetPos 1 : " << targetPos.x << " , " << targetPos.y << " , " << targetPos.z << endl;
+			cout << "DistVect : "    << .x << " , " << targetPos.y << " , " << targetPos.z << endl;
+			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
+			cout << "panCoord    : " << panCoord.x << " , " << panCoord.y << " , " << panCoord.z << endl;
+			panCoord.z = panCoord.z + 1.0;							// increment spherical
+			cout << "targetPos 2 : " << targetPos.x << " , " << targetPos.y << " , " << targetPos.z << endl;
+			targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
+			cout << "targetPos 2 : " << targetPos.x << " , " << targetPos.y << " , " << targetPos.z << endl;
 		break;
 			
-		case GLUT_KEY_DOWN:
-			targetPos.z -= 0.1;
+/*
+		case GLUT_KEY_DOWN:			// pan down
+			panCoord = cartToSph(vectDist(cameraPos, targetPos));
+			panCoord.z = panCoord.z - 1.0;
+			targetPos = vectAdd(cameraPos, sphToCart(panCoord));
 		break;
 
-		case GLUT_KEY_RIGHT:
-			rotZ++;
+		case GLUT_KEY_RIGHT:		// pan right
+			panCoord = cartToSph(vectDist(cameraPos, targetPos));
+			panCoord.z = panCoord.y + 1.0;
+			targetPos = vectAdd(cameraPos, sphToCart(panCoord));
 		break;
 			
-		case GLUT_KEY_LEFT:
-			rotZ--;
+		case GLUT_KEY_LEFT:			// pan left
+			panCoord = cartToSph(vectDist(cameraPos, targetPos));
+			panCoord.z = panCoord.y - 1.0;
+			targetPos = vectAdd(cameraPos, sphToCart(panCoord));
+		break;
+*/
+		case GLUT_KEY_PAGE_UP:		// move up
+			cameraPos.z = cameraPos.z + 0.5;
+			targetPos.z = targetPos.z + 0.5;
+		break;
+
+		case GLUT_KEY_PAGE_DOWN:	// move down
+			cameraPos.z = cameraPos.z - 0.5;
+			targetPos.z = targetPos.z - 0.5;
 		break;
 	}
-
-	if(rotZ > 360)
-		rotZ -= 360.0;
-
-	if(rotX > 360)
-		rotX -= 360.0;
 
 	glutPostRedisplay();
 }
 
 void keyboard( unsigned char key, int x, int y )
 { 	
-	if ( key == 'w' || key == 'W') 		//move forward
+	if ( key == 'w' || key == 'W') 		// move forward
 	{
-		vect3 moveVect = vectMult(vectUnit(vectDist(cameraPos, targetPos)), 0.1);
+		vect3 moveVect = vectMult(vectUnit(vectDist(cameraPos, targetPos)), 0.5);
 		cameraPos = vectAdd(cameraPos, moveVect);
 		targetPos = vectAdd(targetPos, moveVect);
 	}
-	if ( key == 's' || key == 'S') 		//move backward
+	if ( key == 's' || key == 'S') 		// move backward
 	{
-		vect3 moveVect = vectMult(vectUnit(vectDist(cameraPos, targetPos)), -0.1);
+		vect3 moveVect = vectMult(vectUnit(vectDist(cameraPos, targetPos)), -0.5);
 		cameraPos = vectAdd(cameraPos, moveVect);
 		targetPos = vectAdd(targetPos, moveVect);
 	}
-	if ( key == 'd' || key == 'D') 		//move right
+	if ( key == 'd' || key == 'D') 		// move right
 	{
-		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0))), 0.1);
+		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0))), 0.5);
 		moveVect.z = 0.0;
 		cameraPos = vectAdd(cameraPos, moveVect);
 		targetPos = vectAdd(targetPos, moveVect);
 	}
-	if ( key == 'a' || key == 'A') 		//move left
+	if ( key == 'a' || key == 'A') 		// move left
 	{
-		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0))), -0.1);
+		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0))), -0.5);
 		moveVect.z = 0.0;
 		cameraPos = vectAdd(cameraPos, moveVect);
 		targetPos = vectAdd(targetPos, moveVect);
 	}
 
-	if ( key == 'q' || key == 'Q') 		//exit the program
+	if ( key == 'q' || key == 'Q') 		// exit the program
 	{
 		printf("FARWELL, POWERING OFFFF...\n");
 		exit(0);
 	}
 	glutPostRedisplay();
+}
+
+vect3 cartToSph(vect3 a)
+{
+	vect3 sph;
+	sph.x = vectMagn(a);										// radius
+	sph.y = atan(a.y / a.x) * (180/M_PI);									// thetha
+	sph.z = atan( sqrt( (a.x*a.x) + (a.y*a.y) ) / a.z ) * (180/M_PI);		// phi
+
+	return sph;
+}
+
+vect3 sphToCart(vect3 a)
+{
+	vect3 cart;
+	cart.x = a.x * sin(a.z*M_PI/180.0) * cos(a.y*M_PI/180.0);
+	cart.y = a.x * sin(a.z*M_PI/180.0) * sin(a.y*M_PI/180.0);
+	cart.z = a.x * cos(a.z*M_PI/180.0);
+
+	return cart;
 }
 
 vect3 vectUnit(vect3 a)
