@@ -12,9 +12,12 @@ void glutSleep( int );
 void glutLockFrameRate( float );
 void drawString( GLuint , GLuint , void*, const char* );
 int sign( double );
+void drawRoom();
+void drawTable();
+void drawPendulum();
 
-void drawBox( struct box* , vertex );		//boxy.cc
-void defineBox( box* , vect3 );
+void drawBox( struct box* , vect3 , outline ol);		//boxy.cc
+void defineBox( box* , vect3 , colortype );
 
 void runanim(void);
 void showFPS();

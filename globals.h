@@ -4,7 +4,7 @@
 #include "includes.h"
 #include "struct.h"
 
-// Variables to specify window position 
+// Variables to specify window position
 #define WINDOW_POS_X 100
 #define WINDOW_POS_Y 0
 
@@ -13,6 +13,15 @@
 #define WINDOW_MAX_Y 800
 
 #define DFP "datafeed"
+
+extern struct box room[6];
+extern struct box penbase[6];
+
+extern struct box tableLeg1[6];
+extern struct box tableLeg2[6];
+extern struct box tableLeg3[6];
+extern struct box tableLeg4[6];
+extern struct box tableFace[6];
 
 extern vect3 cameraPos;				// camera movement variables
 extern vect3 targetPos;

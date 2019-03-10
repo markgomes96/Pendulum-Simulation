@@ -1,8 +1,10 @@
 #ifndef STRUCTS
 #define STRUCTS
 
-typedef struct vertex 
-{ 
+enum outline { outside, inside, none};
+
+typedef struct vertex
+{
 	float x;
 	float y;
 	float z;
@@ -25,7 +27,7 @@ typedef struct colortype
 	float red;
 	float green;
 	float blue;
-    
+
 	colortype()
 	{};
 
@@ -54,9 +56,10 @@ typedef struct vect3		//stores data for a 3D vector used for calcualtions
 	}
 } vect3;
 
-typedef struct box {
+typedef struct box
+{
 	vertex point[4];
-	colortype color;	
+	colortype color;
 } box;
 
 #endif

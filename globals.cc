@@ -3,8 +3,18 @@
 
 #include "includes.h"
 #include "struct.h"
+#include "globals.h"
 
-float rotZ = 90;							// rotation variables 
+struct box room[6];
+struct box penbase[6];
+
+struct box tableLeg1[6];
+struct box tableLeg2[6];
+struct box tableLeg3[6];
+struct box tableLeg4[6];
+struct box tableFace[6];
+
+float rotZ = 90;							// rotation variables
 float rotX = 0;
 
 vect3 cameraPos = vect3(20.0, 2.0, 2.5);	// camera variables
