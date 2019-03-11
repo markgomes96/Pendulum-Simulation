@@ -1,0 +1,80 @@
+	glPushMatrix();		//move cone man over to corner
+
+	glRotatef(rotZ, 0, 0, 1);
+    	glRotatef(rotX, 1, 0, 0);
+	glTranslated( 0.0, 5.0, -0.5);
+
+	// Draw cone man for scale
+	glPushMatrix();
+	
+	glColor3f(1.0, 1.0, 0.0);
+
+	glTranslated( 0, 0, 2.7);
+	gluSphere(gluNewQuadric(),				//head
+		(GLdouble) 0.5,			//radius
+		(GLint)		10,			//slice 
+		(GLint)		10 );		//stacks
+
+	glColor3f(0.5, 0, 0.5);
+	
+	glTranslated( 0, 0, -3.0);
+	gluCylinder(gluNewQuadric(),			//body
+        (GLdouble) 0.5,     	//base radius
+        (GLdouble) 1.0,     	//top radius
+        (GLdouble) 2.5,         //hieght
+        (GLint)      8,      	//slices
+        (GLint)     20 );       //stacks
+
+	glColor3f(0, 0.5, 0.5);
+
+	glTranslated( -0.25, -0.25, -1.7);				//right leg
+	gluCylinder(gluNewQuadric(),
+		(GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 2.0,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+
+	glTranslated( 0.5, 0.5, 0);                 //left leg
+    	gluCylinder(gluNewQuadric(),
+        (GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 2.0,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+	
+	glPopMatrix();
+	
+	glPushMatrix();
+
+	glRotatef( 20, 1, -1, 0);
+
+	glPushMatrix();
+	
+	glTranslated( 0.9, 0.9, -0.2);                 //right arm 
+	gluCylinder(gluNewQuadric(),
+        (GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 1.8,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+
+	glPopMatrix();
+
+	glRotatef( -40, 1, -1, 0);
+
+	glPushMatrix();
+
+	glTranslated( -0.9, -0.9, -0.2);                 //left arm
+	gluCylinder(gluNewQuadric(),
+        (GLdouble) 0.1,         //base radius
+        (GLdouble) 0.25,         //top radius
+        (GLdouble) 1.8,         //hieght
+        (GLint)      6,         //slices
+        (GLint)     20 );       //stacks
+
+	glPopMatrix();
+
+	glPopMatrix();
+
+	glPopMatrix();
