@@ -12,16 +12,16 @@ void SpecialInput(int key, int x, int y)
 			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
 			panCoord.z = panCoord.z - 1.5;						// increment spherical
 			if(panCoord.z > 0)
-			{ 
+			{
 				targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
 			}
 		break;
-			
+
 		case GLUT_KEY_DOWN:			// pan down
 			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
 			panCoord.z = panCoord.z + 1.5;						// increment spherical
 			if(panCoord.z < 180)
-			{ 
+			{
 				targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
 			}
 		break;
@@ -31,7 +31,7 @@ void SpecialInput(int key, int x, int y)
 			panCoord.y = panCoord.y - 1.5;						// increment spherical
 			targetPos = vectAdd(cameraPos, sphToCart(panCoord));	// convert spherical back to cartesian
 		break;
-			
+
 		case GLUT_KEY_LEFT:			// pan left
 			panCoord = cartToSph(vectDist(cameraPos, targetPos));	// convert cartesian to spherical
 			panCoord.y = panCoord.y + 1.5;						// increment spherical
@@ -53,7 +53,7 @@ void SpecialInput(int key, int x, int y)
 }
 
 void keyboard( unsigned char key, int x, int y )
-{ 	
+{
 	if ( key == 'w' || key == 'W') 		// move forward
 	{
 		vect3 moveVect = vectMult(vectUnit(vectDist(cameraPos, targetPos)), 0.5);
@@ -83,7 +83,7 @@ void keyboard( unsigned char key, int x, int y )
 
 	if ( key == 'q' || key == 'Q') 		// exit the program
 	{
-		printf("FARWELL, POWERING OFFFF...\n");
+		cout << "FARWELL, POWERING OFFFF..." << endl;
 		exit(0);
 	}
 	glutPostRedisplay();
@@ -122,7 +122,7 @@ vect3 vectDist(vect3 a, vect3 b)
 
 vect3 vectCross(vect3 a, vect3 b)
 {
-	return vect3( (a.y * b.z) - (b.y * a.z), 
+	return vect3( (a.y * b.z) - (b.y * a.z),
 				  (b.x * a.z) - (a.x * b.z),
 			      (a.x * b.y) - (b.x * a.y));
 }
@@ -141,5 +141,3 @@ vect3 vectMult(vect3 a, float scalar)
 {
 	return vect3(a.x * scalar, a.y * scalar, a.z * scalar);
 }
-
-

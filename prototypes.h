@@ -16,8 +16,8 @@ void drawRoom();
 void drawTable();
 void drawPendulum();
 
-void drawBox( struct box* , vect3 , outline ol);		//boxy.cc
-void defineBox( box* , vect3 , colortype );
+void drawBox( struct box* , vect3 , outline o);		//boxy.cc
+void defineBox( box* , vect3 , colortype, GLuint* );
 
 void runanim(void);
 void showFPS();
@@ -44,5 +44,6 @@ void step( double* , double* , double* , double );
 int main( int , char** );		//main.cc
 void reshape ( int , int );
 void init( void );
+void textureLoader( int , string );
 
 #endif

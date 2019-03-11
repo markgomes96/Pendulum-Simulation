@@ -2,40 +2,47 @@
 #define BOXY
 
 #include "includes.h"
+#include "globals.h"
 #include "struct.h"
 
 void drawBox( struct box *face, vect3 position, outline ol)
 {
-	int i, j;
-
 	glPolygonMode(GL_FRONT, GL_FILL);
 	glPolygonMode(GL_BACK, GL_FILL);
 
 	glPushMatrix();
 	glTranslatef( position.x, position.y, position.z);		//move box to right position
 
-	for(j = 0; j < 6; j++)	//draw box
+	for(int j = 0; j < 6; j++)	//draw box
 	{
-
+#ifdef TEXTURE
+		// set to face texture
+		glBindTexture(GL_TEXTURE_2D, face[j].facetext);
+#endif
+		// set to face color
 		glColor3f(face[j].color.red,
 		  face[j].color.green,
 		  face[j].color.blue);
 
 		glBegin( GL_POLYGON );				//draw solid faces
-			for (i = 0; i < 4; i++)
+			for (int i = 0; i < 4; i++)
 			{
+				glTexCoord2d(textarray[0].textcoords[i*2],
+							 textarray[0].textcoords[(i*2)+1]);
 				glVertex3f(face[j].point[i].x,
 					face[j].point[i].y,
 					face[j].point[i].z);
 			}
 		glEnd();
 
+#ifdef TEXTURE
+#else
 		glLineWidth(5.0);
 		if(ol == outside)
 		{
 			glColor3f(1.0, 1.0, 1.0);
 			glBegin( GL_LINE_LOOP );			//draw outside face outline
-				for (i = 0; i < 4; i++)
+				for (int i = 0; i < 4; i++)
 				{
 					glVertex3f(face[j].point[i].x,
 						face[j].point[i].y,
@@ -47,7 +54,7 @@ void drawBox( struct box *face, vect3 position, outline ol)
 		{
 			glColor3f(1.0, 1.0, 1.0);
 			glBegin( GL_LINE_LOOP );			//draw inside face outline
-				for (i = 0; i < 4; i++)
+				for (int i = 0; i < 4; i++)
 				{
 					glVertex3f( (face[j].point[i].x * 0.95),
 						(face[j].point[i].y * 0.95),
@@ -56,12 +63,13 @@ void drawBox( struct box *face, vect3 position, outline ol)
 			glEnd();
 		}
 		glLineWidth(1.0);
+#endif
 	}
-
 	glPopMatrix();
 }
 
-void defineBox(box *face, vect3 scale, colortype col)
+// faces -> {bottom, left, right, back, front, top}
+void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 {
 	face[0].point[0].x = -1.0 * scale.x;  // Bottom
 	face[0].point[0].y = -1.0 * scale.y;
@@ -183,7 +191,6 @@ void defineBox(box *face, vect3 scale, colortype col)
 	face[5].point[3].z =  1.0 * scale.z;
 	face[5].point[3].w =  1.0;
 
-
 	// Define the colors
 	face[0].color.red   = col.red;
 	face[0].color.green = col.green;
@@ -209,6 +216,13 @@ void defineBox(box *face, vect3 scale, colortype col)
 	face[5].color.green = col.green;
 	face[5].color.blue  = col.blue;
 
+	// Define face textures
+	face[0].facetext = ft[0];
+	face[1].facetext = ft[1];
+	face[2].facetext = ft[2];
+	face[3].facetext = ft[3];
+	face[4].facetext = ft[4];
+	face[5].facetext = ft[5];
 }
 
 #endif

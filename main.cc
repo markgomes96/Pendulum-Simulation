@@ -9,34 +9,86 @@
 #include "prototypes.h"
 #include "struct.h"
 
-/*
-*Add vert struct to store wieght position
-*Add animation for wieght position
-*Connect animation to real physics
-*/
-
 void init(void)
 {
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glLoadIdentity();
 
-	//***create all my objects with color
-	// room object
-	colortype roomColor = colortype(0.93, 0.55, 0.39);	// peach
-	defineBox(&room[0], vect3(30.0, 30.0, 30.0), roomColor);
+#ifdef TEXTURE
+	textureLoader(0, "./textures/wall.jpg");
+	textureLoader(1, "./textures/carpet.jpg");
+	textureLoader(2, "./textures/ceiling.jpg");
+	textureLoader(3, "./textures/table.jpg");
+	textureLoader(4, "./textures/bluebase.jpg");
+	textureLoader(5, "./textures/metalpendulum.jpg");
+#endif
 
-	// pendulum base object
-	colortype penbaseColor = colortype(1.0, 0.0, 0.0);		// red
-	defineBox(&penbase[0], vect3(5.0, 5.0, 0.1), penbaseColor);
+	//*** create all my objects
+	// faces -> {bottom, left, right, back, front, top}
+	// room object
+#ifdef TEXTURE
+	colortype roomColor = colortype(1.0, 1.0, 1.0);
+#else
+	colortype roomColor = colortype(0.93, 0.55, 0.39);	// peach
+#endif
+	GLuint roomft[] = {textarray[1].textid, textarray[0].textid, textarray[0].textid,
+		textarray[0].textid, textarray[0].textid, textarray[2].textid};
+	defineBox(&room[0], vect3(14.0, 20.0, 6.0), roomColor, &roomft[0]);
 
 	// table object
+#ifdef TEXTURE
+	colortype tableColor = colortype(1.0, 1.0, 1.0);
+#else
 	colortype tableColor = colortype(0.45, 0.30, 0.22);		// brown
-	defineBox(&tableLeg1[0], vect3(0.5, 0.5, 1.5), tableColor);
-	defineBox(&tableLeg2[0], vect3(0.5, 0.5, 1.5), tableColor);
-	defineBox(&tableLeg3[0], vect3(0.5, 0.5, 1.5), tableColor);
-	defineBox(&tableLeg4[0], vect3(0.5, 0.5, 1.5), tableColor);
-	defineBox(&tableFace[0], vect3(6.0, 6.0, 0.2), tableColor);
+#endif
+	GLuint tableft[] = {textarray[3].textid, textarray[3].textid, textarray[3].textid,
+		textarray[3].textid, textarray[3].textid, textarray[3].textid};
+	defineBox(&tableLeg1[0], vect3(0.5, 0.5, 1.5), tableColor, &tableft[0]);
+	defineBox(&tableLeg2[0], vect3(0.5, 0.5, 1.5), tableColor, &tableft[0]);
+	defineBox(&tableLeg3[0], vect3(0.5, 0.5, 1.5), tableColor, &tableft[0]);
+	defineBox(&tableLeg4[0], vect3(0.5, 0.5, 1.5), tableColor, &tableft[0]);
+	defineBox(&tableFace[0], vect3(6.0, 6.0, 0.2), tableColor, &tableft[0]);
+
+	// pendulum base object
+#ifdef TEXTURE
+	colortype penbaseColor = colortype(1.0, 1.0, 1.0);
+#else
+	colortype penbaseColor = colortype(1.0, 0.0, 0.0);		// red
+#endif
+	GLuint baseft[] = {textarray[4].textid, textarray[4].textid, textarray[4].textid,
+		textarray[4].textid, textarray[4].textid, textarray[4].textid};
+	defineBox(&penbase[0], vect3(5.0, 5.0, 0.1), penbaseColor, &baseft[0]);
 	//***
+}
+
+void textureLoader(int ti, string path) 	// textarray index, file path
+{
+    glEnable(GL_TEXTURE_2D);
+
+	glGenTextures(1, &textarray[ti].textid);		// create texture ID
+	glBindTexture(GL_TEXTURE_2D, textarray[ti].textid);	// bind texutre to structure type
+
+	// load image data into char array using SOIL library
+	textarray[ti].image = SOIL_load_image(path.c_str(),
+			&textarray[ti].width, &textarray[ti].height, 0, SOIL_LOAD_RGB);
+	// set up filters and functions for MIPMAPS
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_MIRRORED_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	// glTexImage2D takes data and converts it to format used by OpenGL
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, textarray[ti].width, textarray[ti].height,
+			0, GL_RGB, GL_UNSIGNED_BYTE, textarray[ti].image);
+	// builds MIPMAP representations of texutres and stores in object
+	glGenerateMipmap(GL_TEXTURE_2D);
+	SOIL_free_image_data(textarray[ti].image);
+
+	std::cout << "Width: " << textarray[ti].width << ", Height: "
+			  << textarray[ti].height << std::endl;
+    std::cout << "Image ID: " << textarray[ti].textid << std::endl;
 }
 
 void reshape (int w, int h)
@@ -57,13 +109,18 @@ int main(int argc, char** argv)
 	glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
 	glutInitWindowSize (800, 800);
 	glutInitWindowPosition (100, 100);
-	glutCreateWindow (argv[0]);
+	glutCreateWindow ("Pendulum Project");
+
+	glewInit();
 	init ();
+
 	glutReshapeFunc(reshape);
 	glutDisplayFunc(display);
-	glutKeyboardFunc(keyboard);
-	glutSpecialFunc(SpecialInput);
 	glutIdleFunc(runanim);
+
+	glutKeyboardFunc(keyboard);		// input
+	glutSpecialFunc(SpecialInput);
+
 	glutMainLoop();
 	return 0;
 }

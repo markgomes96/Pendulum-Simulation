@@ -14,11 +14,13 @@ struct box tableLeg3[6];
 struct box tableLeg4[6];
 struct box tableFace[6];
 
+struct texture textarray[10];
+
 float rotZ = 90;							// rotation variables
 float rotX = 0;
 
-vect3 cameraPos = vect3(20.0, 2.0, 2.5);	// camera variables
-vect3 targetPos = vect3(0.0, 0.0, 0.0);
+vect3 cameraPos = vect3(10.36, -16.91, 3.17);	// camera variables
+vect3 targetPos = vect3(4.83, -8.65, 0.82);
 
 unsigned frames = 0;						// fps variables
 float fps = 0.0;

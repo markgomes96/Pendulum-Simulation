@@ -60,6 +60,18 @@ typedef struct box
 {
 	vertex point[4];
 	colortype color;
+	GLuint facetext;
 } box;
+
+typedef struct texture
+{
+	GLuint textid;
+	unsigned char* image;
+	int width, height;
+	float textcoords[8];
+
+	texture()
+	{}
+} texutre;
 
 #endif

@@ -23,6 +23,8 @@ extern struct box tableLeg3[6];
 extern struct box tableLeg4[6];
 extern struct box tableFace[6];
 
+extern struct texture textarray[10];       // holds all the textures
+
 extern vect3 cameraPos;				// camera movement variables
 extern vect3 targetPos;
 
