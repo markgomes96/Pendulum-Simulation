@@ -1,7 +1,5 @@
 CC = gcc
 C++ = g++
-#LIBDIRS = -L/usr/lib64
-#INCDIRS = -I/usr/include
 LDLIBS =  -lGL -lGLU -lGLEW -lglut libSOIL.a -lX11 -lm
 
 INCLUDES   = includes.h
@@ -38,5 +36,9 @@ clean :
 	rm *.o
 
 pristine :
+	rm *.o
+	rm pendpoc
+
+purge :
 	rm *.o
 	rm pendpoc
