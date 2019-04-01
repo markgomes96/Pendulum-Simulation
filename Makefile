@@ -7,30 +7,32 @@ HEADERS    = globals.h struct.h SOIL.h
 PROTOTYPES = prototypes.h
 OBJS 	   = display.o boxy.o timephys.o input.o pend.o
 
-CF =	#-DTEXTURE -> to switch to level scene
+# build flags
+BDFG =  -DTEXTURE
+BDFG +=  -DLIGHTING
 
 all : pendpoc
 
 pendpoc: main.o $(INCLUDES) $(HEADERS) $(PROTOTYPES) $(OBJS)
-	$(C++) $(CF) -o pendpoc main.o $(OBJS) $(INCDIRS) $(LIBDIRS) $(LDLIBS)
+	$(C++) $(BDFG) -o pendpoc main.o $(OBJS) $(INCDIRS) $(LIBDIRS) $(LDLIBS)
 
 display.o : display.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
-	$(C++) $(CF) -c display.cc
+	$(C++) $(BDFG) -c display.cc
 
 boxy.o : boxy.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
-	$(C++) $(CF) -c boxy.cc
+	$(C++) $(BDFG) -c boxy.cc
 
 timephys.o : timephys.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
-	$(C++) $(CF) -c timephys.cc
+	$(C++) $(BDFG) -c timephys.cc
 
 input.o : input.cc $(INCLUDES) $(HEADERS) $(PROTOTYPES)
-	$(C++) $(CF) -c input.cc
+	$(C++) $(BDFG) -c input.cc
 
 pend.o : pend.c $(INCLUDES) $(HEADERS) $(PROTOTYPES)
-	$(C++) $(CF) -c pend.c
+	$(C++) $(BDFG) -c pend.c
 
 main.o : main.cc
-	$(C++) $(CF) -c main.cc
+	$(C++) $(BDFG) -c main.cc
 
 clean :
 	rm *.o

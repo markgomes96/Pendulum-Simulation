@@ -5,6 +5,14 @@
 #include "struct.h"
 #include "globals.h"
 
+// lighting variables
+vect3 lightPos = vect3(6.0, 6.0, 5.0);
+vect3 startLP = lightPos;
+
+float cambounds[6];
+vect3 oldCamPos = vect3(0.0, 0.0, 0.0);
+vect3 oldTarget = vect3(0.0, 0.0, 0.0);
+
 struct box room[6];
 struct box penbase[6];
 

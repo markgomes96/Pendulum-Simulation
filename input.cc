@@ -68,14 +68,18 @@ void keyboard( unsigned char key, int x, int y )
 	}
 	if ( key == 'd' || key == 'D') 		// move right
 	{
-		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0))), 0.5);
+		vect3 upVect = vectDist(cameraPos, vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0));
+		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), upVect)), 0.5);
+
 		moveVect.z = 0.0;
 		cameraPos = vectAdd(cameraPos, moveVect);
 		targetPos = vectAdd(targetPos, moveVect);
 	}
 	if ( key == 'a' || key == 'A') 		// move left
 	{
-		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0))), -0.5);
+		vect3 upVect = vectDist(cameraPos, vect3(cameraPos.x,cameraPos.y,cameraPos.z+10.0));
+		vect3 moveVect = vectMult(vectUnit(vectCross(vectDist(cameraPos, targetPos), upVect)), -0.5);
+
 		moveVect.z = 0.0;
 		cameraPos = vectAdd(cameraPos, moveVect);
 		targetPos = vectAdd(targetPos, moveVect);
@@ -86,6 +90,32 @@ void keyboard( unsigned char key, int x, int y )
 		cout << "FARWELL, POWERING OFFFF..." << endl;
 		exit(0);
 	}
+
+	// *** light testing ***
+	if ( key == 'l' || key == 'L')
+	{
+		if(lightPos.x == startLP.x && lightPos.y == startLP.y)
+		{
+			lightPos.x = -startLP.x;
+			lightPos.y = startLP.y;
+		}
+		else if(lightPos.x == -startLP.x && lightPos.y == startLP.y)
+		{
+			lightPos.x = -startLP.x;
+			lightPos.y = -startLP.y;
+		}
+		else if(lightPos.x == -startLP.x && lightPos.y == -startLP.y)
+		{
+			lightPos.x = startLP.x;
+			lightPos.y = -startLP.y;
+		}
+		else if(lightPos.x == startLP.x && lightPos.y == -startLP.y)
+		{
+			lightPos.x = startLP.x;
+			lightPos.y = startLP.y;
+		}
+	}
+
 	glutPostRedisplay();
 }
 

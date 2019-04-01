@@ -27,8 +27,15 @@ void drawBox( struct box *face, vect3 position, outline ol)
 		glBegin( GL_POLYGON );				//draw solid faces
 			for (int i = 0; i < 4; i++)
 			{
+			#ifdef LIGHTING
+				glNormal3f( 0.0, 0.0, 1.0);
+			#endif
+
+			#ifdef TEXTURE
 				glTexCoord2d(textarray[0].textcoords[i*2],
 							 textarray[0].textcoords[(i*2)+1]);
+			#endif
+
 				glVertex3f(face[j].point[i].x,
 					face[j].point[i].y,
 					face[j].point[i].z);
@@ -37,7 +44,7 @@ void drawBox( struct box *face, vect3 position, outline ol)
 
 #ifdef TEXTURE
 #else
-		glLineWidth(5.0);
+		glLineWidth(3.0);
 		if(ol == outside)
 		{
 			glColor3f(1.0, 1.0, 1.0);
@@ -56,9 +63,9 @@ void drawBox( struct box *face, vect3 position, outline ol)
 			glBegin( GL_LINE_LOOP );			//draw inside face outline
 				for (int i = 0; i < 4; i++)
 				{
-					glVertex3f( (face[j].point[i].x * 0.95),
-						(face[j].point[i].y * 0.95),
-						(face[j].point[i].z * 0.95));
+					glVertex3f( (face[j].point[i].x * 0.99),
+						(face[j].point[i].y * 0.99),
+						(face[j].point[i].z * 0.99));
 				}
 			glEnd();
 		}
