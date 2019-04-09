@@ -26,16 +26,16 @@ void drawBox( struct box *face, vect3 position, outline ol)
 		  face[j].color.blue);
 
 		glBegin( GL_POLYGON );				//draw solid faces
-			#ifdef LIGHTING
-				vect3 v1 = vect3(face[j].point[1].x - face[j].point[0].x,
-								 face[j].point[1].y - face[j].point[0].y,
-								 face[j].point[1].z - face[j].point[0].z);
-				vect3 v2 = vect3(face[j].point[1].x - face[j].point[2].x,
-								 face[j].point[1].y - face[j].point[2].y,
-								 face[j].point[1].z - face[j].point[2].z);
-				vect3 cp = vectUnit(vectCross(v1, v2));
-				glNormal3f( cp.x, cp.y, cp.z );
-			#endif
+		#ifdef LIGHTING
+			if(ol == outside)
+			{
+				glNormal3f( face[j].norm.x, face[j].norm.y, face[j].norm.z );
+			}
+			else if(ol == inside)
+ 			{
+				glNormal3f( -face[j].norm.x, -face[j].norm.y, -face[j].norm.z );
+			}
+		#endif
 
 			for (int i = 0; i < 4; i++)
 			{
@@ -111,40 +111,40 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[1].point[0].z = -1.0 * scale.z;
 	face[1].point[0].w =  1.0;
 
-	face[1].point[1].x =  1.0 * scale.x;
-	face[1].point[1].y = -1.0 * scale.y;
-	face[1].point[1].z = -1.0 * scale.z;
-	face[1].point[1].w =  1.0;
+	face[1].point[3].x =  1.0 * scale.x;
+	face[1].point[3].y = -1.0 * scale.y;
+	face[1].point[3].z = -1.0 * scale.z;
+	face[1].point[3].w =  1.0;
 
 	face[1].point[2].x =  1.0 * scale.x;
     face[1].point[2].y = -1.0 * scale.y;
 	face[1].point[2].z =  1.0 * scale.z;
 	face[1].point[2].w =  1.0;	
 
-	face[1].point[3].x = -1.0 * scale.x;
-	face[1].point[3].y = -1.0 * scale.y;
-	face[1].point[3].z =  1.0 * scale.z;
-	face[1].point[3].w =  1.0;
+	face[1].point[1].x = -1.0 * scale.x;
+	face[1].point[1].y = -1.0 * scale.y;
+	face[1].point[1].z =  1.0 * scale.z;
+	face[1].point[1].w =  1.0;
 
 	face[2].point[0].x = -1.0 * scale.x;  // Right Side
 	face[2].point[0].y =  1.0 * scale.y;
 	face[2].point[0].z = -1.0 * scale.z;
 	face[2].point[0].w =  1.0;
 
-	face[2].point[1].x = -1.0 * scale.x;
-	face[2].point[1].y =  1.0 * scale.y;
-	face[2].point[1].z =  1.0 * scale.z;
-	face[2].point[1].w =  1.0;
+	face[2].point[3].x = -1.0 * scale.x;
+	face[2].point[3].y =  1.0 * scale.y;
+	face[2].point[3].z =  1.0 * scale.z;
+	face[2].point[3].w =  1.0;
 
 	face[2].point[2].x =  1.0 * scale.x;
 	face[2].point[2].y =  1.0 * scale.y;
 	face[2].point[2].z =  1.0 * scale.z;
 	face[2].point[2].w =  1.0;
 
-	face[2].point[3].x =  1.0 * scale.x;
-	face[2].point[3].y =  1.0 * scale.y;
-	face[2].point[3].z = -1.0 * scale.z;
-	face[2].point[3].w =  1.0;
+	face[2].point[1].x =  1.0 * scale.x;
+	face[2].point[1].y =  1.0 * scale.y;
+	face[2].point[1].z = -1.0 * scale.z;
+	face[2].point[1].w =  1.0;
 
 	face[3].point[0].x = -1.0 * scale.x;  // Back Side
 	face[3].point[0].y = -1.0 * scale.y;
@@ -238,6 +238,20 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[3].facetext = ft[3];
 	face[4].facetext = ft[4];
 	face[5].facetext = ft[5];
+
+	// Define surface normals
+	for(int j = 0; j < 6; j++)	//draw box
+	{
+		vect3 v1 = vect3(face[j].point[1].x - face[j].point[0].x,
+						 face[j].point[1].y - face[j].point[0].y,
+						 face[j].point[1].z - face[j].point[0].z);
+
+		vect3 v2 = vect3(face[j].point[1].x - face[j].point[2].x,
+						 face[j].point[1].y - face[j].point[2].y,
+						 face[j].point[1].z - face[j].point[2].z);
+
+		face[j].norm = vectUnit(vectCross(v1, v2));
+	}
 }
 
 #endif

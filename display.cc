@@ -177,11 +177,11 @@ void drawPendulum()
 {
 #ifdef LIGHTING
 	// material prameters
-	GLfloat mat_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
-	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
+	GLfloat mat_diffuse[] = { 0.1, 0.4, 0.7, 1.0 };
 	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat no_shininess[] = { 0.0 };
-	GLfloat low_shininess[] = { 5.0 };
+	GLfloat low_shininess[] = { 40.0 };
 	GLfloat high_shininess[] = { 100.0 };
 	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
 	GLfloat emission_on[] = { 0.5, 0.5, 0.5, 1.0};

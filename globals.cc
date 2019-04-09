@@ -6,7 +6,7 @@
 #include "globals.h"
 
 // lighting variables
-vect3 lightPos = vect3(6.0, 6.0, 5.0);
+vect3 lightPos = vect3(12.0, 18.0, 5.0);
 vect3 startLP = lightPos;
 
 float cambounds[6];
