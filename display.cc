@@ -20,14 +20,12 @@ void display(void)
 #ifdef LIGHTING
 	// material prameters
 	GLfloat mat_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
-	//GLfloat mat_ambient_color[] = { 0.8, 0.8, 0.2, 1.0 };
 	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
 	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat no_shininess[] = { 0.0 };
 	GLfloat low_shininess[] = { 5.0 };
 	GLfloat high_shininess[] = { 100.0 };
 	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
-
 	GLfloat emission_on[] = { 0.5, 0.5, 0.5, 1.0};
 	GLfloat on[] = { 1.0, 1.0, 1.0, 1.0 };
 	GLfloat off[] = { 0.0, 0.0, 0.0, 1.0};
@@ -178,12 +176,25 @@ void drawTable()
 void drawPendulum()
 {
 #ifdef LIGHTING
+	// material prameters
+	GLfloat mat_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
+	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat no_shininess[] = { 0.0 };
+	GLfloat low_shininess[] = { 5.0 };
+	GLfloat high_shininess[] = { 100.0 };
+	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
+	GLfloat emission_on[] = { 0.5, 0.5, 0.5, 1.0};
+	GLfloat on[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat off[] = { 0.0, 0.0, 0.0, 1.0};
+
+
 	// material properties for pendulum base
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  off);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, low_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
 #endif
 
 	//glBindTexture(GL_TEXTURE_2D, textarray[4].textid);
@@ -196,11 +207,11 @@ void drawPendulum()
 
 #ifdef LIGHTING
 	// material properties for metal pendulum parts
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  off);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
 #endif
 
 #ifdef TEXTURE

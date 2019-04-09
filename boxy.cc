@@ -4,6 +4,7 @@
 #include "includes.h"
 #include "globals.h"
 #include "struct.h"
+#include "prototypes.h"
 
 void drawBox( struct box *face, vect3 position, outline ol)
 {
@@ -25,12 +26,19 @@ void drawBox( struct box *face, vect3 position, outline ol)
 		  face[j].color.blue);
 
 		glBegin( GL_POLYGON );				//draw solid faces
-			for (int i = 0; i < 4; i++)
-			{
 			#ifdef LIGHTING
-				glNormal3f( 0.0, 0.0, 1.0);
+				vect3 v1 = vect3(face[j].point[1].x - face[j].point[0].x,
+								 face[j].point[1].y - face[j].point[0].y,
+								 face[j].point[1].z - face[j].point[0].z);
+				vect3 v2 = vect3(face[j].point[1].x - face[j].point[2].x,
+								 face[j].point[1].y - face[j].point[2].y,
+								 face[j].point[1].z - face[j].point[2].z);
+				vect3 cp = vectUnit(vectCross(v1, v2));
+				glNormal3f( cp.x, cp.y, cp.z );
 			#endif
 
+			for (int i = 0; i < 4; i++)
+			{
 			#ifdef TEXTURE
 				glTexCoord2d(textarray[0].textcoords[i*2],
 							 textarray[0].textcoords[(i*2)+1]);
@@ -83,8 +91,8 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[0].point[0].z = -1.0 * scale.z;
 	face[0].point[0].w =  1.0;
 
-	face[0].point[1].x = -1.0 * scale.x;
-	face[0].point[1].y =  1.0 * scale.y;
+	face[0].point[1].x =  1.0 * scale.x;
+	face[0].point[1].y = -1.0 * scale.y;
 	face[0].point[1].z = -1.0 * scale.z;
 	face[0].point[1].w =  1.0;
 
@@ -93,8 +101,8 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[0].point[2].z = -1.0 * scale.z;
 	face[0].point[2].w =  1.0;
 
-	face[0].point[3].x =  1.0 * scale.x;
-	face[0].point[3].y = -1.0 * scale.y;
+	face[0].point[3].x = -1.0 * scale.x;
+	face[0].point[3].y =  1.0 * scale.y;
 	face[0].point[3].z = -1.0 * scale.z;
 	face[0].point[3].w =  1.0;
 
@@ -103,19 +111,19 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[1].point[0].z = -1.0 * scale.z;
 	face[1].point[0].w =  1.0;
 
-	face[1].point[1].x = -1.0 * scale.x;
+	face[1].point[1].x =  1.0 * scale.x;
 	face[1].point[1].y = -1.0 * scale.y;
-	face[1].point[1].z =  1.0 * scale.z;
+	face[1].point[1].z = -1.0 * scale.z;
 	face[1].point[1].w =  1.0;
 
 	face[1].point[2].x =  1.0 * scale.x;
     face[1].point[2].y = -1.0 * scale.y;
 	face[1].point[2].z =  1.0 * scale.z;
-	face[1].point[2].w =  1.0;
+	face[1].point[2].w =  1.0;	
 
-	face[1].point[3].x =  1.0 * scale.x;
+	face[1].point[3].x = -1.0 * scale.x;
 	face[1].point[3].y = -1.0 * scale.y;
-	face[1].point[3].z = -1.0 * scale.z;
+	face[1].point[3].z =  1.0 * scale.z;
 	face[1].point[3].w =  1.0;
 
 	face[2].point[0].x = -1.0 * scale.x;  // Right Side
@@ -144,8 +152,8 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[3].point[0].w =  1.0;
 
 	face[3].point[1].x = -1.0 * scale.x;
-	face[3].point[1].y = -1.0 * scale.y;
-	face[3].point[1].z =  1.0 * scale.z;
+	face[3].point[1].y =  1.0 * scale.y;
+	face[3].point[1].z = -1.0 * scale.z;
 	face[3].point[1].w =  1.0;
 
 	face[3].point[2].x = -1.0 * scale.x;
@@ -154,8 +162,8 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[3].point[2].w =  1.0;
 
 	face[3].point[3].x = -1.0 * scale.x;
-	face[3].point[3].y =  1.0 * scale.y;
-	face[3].point[3].z = -1.0 * scale.z;
+	face[3].point[3].y = -1.0 * scale.y;
+	face[3].point[3].z =  1.0 * scale.z;
 	face[3].point[3].w =  1.0;
 
 	face[4].point[0].x =  1.0 * scale.x;  // Front Side
@@ -176,7 +184,7 @@ void defineBox(box *face, vect3 scale, colortype col, GLuint *ft)
 	face[4].point[3].x =  1.0 * scale.x;
 	face[4].point[3].y =  1.0 * scale.y;
 	face[4].point[3].z = -1.0 * scale.z;
-	face[4].point[3].w =  1.0;
+	face[4].point[3].w =  1.0;	
 
 	face[5].point[0].x = -1.0 * scale.x;  // Top
 	face[5].point[0].y = -1.0 * scale.y;

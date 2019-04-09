@@ -8,7 +8,7 @@ PROTOTYPES = prototypes.h
 OBJS 	   = display.o boxy.o timephys.o input.o pend.o
 
 # build flags
-BDFG =  -DTEXTURE
+#BDFG =  -DTEXTURE
 BDFG +=  -DLIGHTING
 
 all : pendpoc

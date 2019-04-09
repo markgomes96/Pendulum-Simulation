@@ -134,6 +134,8 @@ int main(int argc, char** argv)
 	if(argc > 1)				//take in command line scaling factor
 		inputFR = stof(argv[1]);
 
+	cout << "\nPress [L] to move light around\n" << endl;
+
 	glutInit(&argc, argv);
 	glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );
 	glutInitWindowSize (800, 800);
