@@ -14,9 +14,30 @@ void init(void)
 	glClearColor (0.0, 0.0, 0.0, 0.0);
 	glLoadIdentity();
 
+#ifdef LIGHTING
+	GLfloat ambient[] = { 0.0, 0.0, 0.0, 1.0 };
+	GLfloat diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat lmodel_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
+	GLfloat local_view[] = { 0.0 };
+
+	glShadeModel (GL_SMOOTH);
+
+	// ambient lighting
+	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, lmodel_ambient);
+	glLightModelfv(GL_LIGHT_MODEL_LOCAL_VIEWER, local_view);
+	// directional lighting
+	glLightfv(GL_LIGHT0, GL_AMBIENT,   ambient);
+	glLightfv (GL_LIGHT0, GL_SPECULAR, specular);
+	glLightfv (GL_LIGHT0, GL_DIFFUSE,  diffuse);
+
+	glEnable(GL_LIGHTING);
+	glEnable(GL_LIGHT0);
+#endif
+
 #ifdef TEXTURE
-	textureLoader(0, "./textures/wall.jpg");
-	textureLoader(1, "./textures/carpet.jpg");
+	textureLoader(0, "./textures/wall2.jpg");
+	textureLoader(1, "./textures/floor.jpg");
 	textureLoader(2, "./textures/ceiling.jpg");
 	textureLoader(3, "./textures/table.jpg");
 	textureLoader(4, "./textures/bluebase.jpg");
@@ -33,7 +54,13 @@ void init(void)
 #endif
 	GLuint roomft[] = {textarray[1].textid, textarray[0].textid, textarray[0].textid,
 		textarray[0].textid, textarray[0].textid, textarray[2].textid};
-	defineBox(&room[0], vect3(14.0, 20.0, 6.0), roomColor, &roomft[0]);
+
+	vect3 scale = vect3(14.0, 20.0, 6.0);
+	defineBox(&room[0], scale, roomColor, &roomft[0]);
+	// set camera bounds to room size
+	cambounds[0] = -1 * scale.x;		cambounds[1] = scale.x;
+	cambounds[2] = -1 * scale.y;		cambounds[3] = scale.y;
+	cambounds[4] = -1 * scale.z;		cambounds[5] = scale.z;
 
 	// table object
 #ifdef TEXTURE
@@ -86,9 +113,11 @@ void textureLoader(int ti, string path) 	// textarray index, file path
 	glGenerateMipmap(GL_TEXTURE_2D);
 	SOIL_free_image_data(textarray[ti].image);
 
-	std::cout << "Width: " << textarray[ti].width << ", Height: "
-			  << textarray[ti].height << std::endl;
-    std::cout << "Image ID: " << textarray[ti].textid << std::endl;
+	/*
+	cout << "Width: " << textarray[ti].width << ", Height: "
+			  << textarray[ti].height << endl;
+    cout << "Image ID: " << textarray[ti].textid << endl;
+	*/
 }
 
 void reshape (int w, int h)
@@ -96,7 +125,7 @@ void reshape (int w, int h)
 	glViewport (0, 0, (GLsizei) w, (GLsizei) h);
 	glMatrixMode (GL_PROJECTION);
 	glLoadIdentity();
-	gluPerspective(40.0, (GLfloat) w/(GLfloat) h, 1.0, 100.0);
+	gluPerspective(40.0, (GLfloat) w/(GLfloat) h, 0.25, 100.0);
 	glMatrixMode(GL_MODELVIEW);
 }
 
@@ -104,6 +133,8 @@ int main(int argc, char** argv)
 {
 	if(argc > 1)				//take in command line scaling factor
 		inputFR = stof(argv[1]);
+
+	cout << "\nPress [L] to move light around\n" << endl;
 
 	glutInit(&argc, argv);
 	glutInitDisplayMode ( GLUT_DOUBLE | GLUT_RGB | GLUT_DEPTH );

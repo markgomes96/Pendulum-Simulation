@@ -61,6 +61,7 @@ typedef struct box
 	vertex point[4];
 	colortype color;
 	GLuint facetext;
+	vect3 norm;
 } box;
 
 typedef struct texture

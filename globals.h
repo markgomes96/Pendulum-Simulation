@@ -14,6 +14,15 @@
 
 #define DFP "datafeed"
 
+// lighting variables
+extern vect3 lightPos;
+extern vect3 startLP;   // ***testing variable
+
+// {-x, +x, -y, +y, -z, +z}
+extern float cambounds[6];
+extern vect3 oldCamPos;
+extern vect3 oldTarget;
+
 extern struct box room[6];
 extern struct box penbase[6];
 

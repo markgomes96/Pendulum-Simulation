@@ -11,21 +11,78 @@ void display(void)
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
 	glLoadIdentity();   	//call this before setting the viewing position
 
-	//we are going to set our position to be down the Y-Axis looking at the
-	//center of the coordinate frame.  The positive Z-Axis will be up.
+	constrainCamera();
 
 	gluLookAt( cameraPos.x,  cameraPos.y,  cameraPos.z,  		// Eye
 			   targetPos.x,  targetPos.y,  targetPos.z,  		// Center
 				0.0,  0.0,  1.0); 		// Up
+
+#ifdef LIGHTING
+	// material prameters
+	GLfloat mat_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
+	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat no_shininess[] = { 0.0 };
+	GLfloat low_shininess[] = { 5.0 };
+	GLfloat high_shininess[] = { 100.0 };
+	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
+	GLfloat emission_on[] = { 0.5, 0.5, 0.5, 1.0};
+	GLfloat on[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat off[] = { 0.0, 0.0, 0.0, 1.0};
+
+	// handle lighting position
+	GLfloat position0[] = { lightPos.x, lightPos.y, lightPos.z, 1.0 };
+	glLightfv (GL_LIGHT0, GL_POSITION, position0);
+#endif
 
 #ifdef TEXTURE
 	glEnable(GL_TEXTURE_2D);	// enable texturing
 #endif
 	glEnable(GL_DEPTH_TEST);	// enable depth buffer
 
+#ifdef LIGHTING
+	// draw light position for testing
+	glDisable(GL_LIGHTING);
+	glPushMatrix();
+	glColor3f(1.0, 1.0, 0.0);
+	glTranslatef( lightPos.x, lightPos.y, lightPos.z);
+	gluSphere(gluNewQuadric(),				//head
+		(GLdouble) 0.5,			//radius
+		(GLint)		10,			//slice
+		(GLint)		10 );		//stacks
+	glPopMatrix();
+	glEnable(GL_LIGHTING);
+#endif
+
+#ifdef LIGHTING
+	// material properties for Room
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, low_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
+#endif
 	drawRoom();
+
+#ifdef LIGHTING
+	// material properties for Table
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, low_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
+#endif
 	drawTable();
+
 	drawPendulum();
+
+#ifdef LIGHTING
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   off);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   off);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  off);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, off);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  off);
+#endif
 
 	showFPS();
 
@@ -34,6 +91,42 @@ void display(void)
 	glDisable(GL_TEXTURE_2D);
 #endif
     glDisable(GL_DEPTH_TEST);
+}
+
+// constrains camera based camera bounds variable
+void constrainCamera()
+{
+	float buffer = 0.3;
+	bool hitBounds = false;
+
+	// x constraints
+	if( cameraPos.x < (cambounds[0] + buffer) )
+		hitBounds = true;
+	else if( cameraPos.x > (cambounds[1] - buffer) )
+		hitBounds = true;
+
+	// y constraints
+	if( cameraPos.y < (cambounds[2] + buffer) )
+		hitBounds = true;
+	else if(cameraPos.y > (cambounds[3] - buffer) )
+		hitBounds = true;
+
+	// z constraints
+	if(cameraPos.z < (cambounds[4] + buffer) )
+		hitBounds = true;
+	else if(cameraPos.z > (cambounds[5] - buffer) )
+		hitBounds = true;
+
+	// adjust target position
+	if(hitBounds)
+	{
+		cameraPos = oldCamPos;
+		targetPos = oldTarget;
+	}
+
+	// record last cam and target positions
+	oldCamPos = cameraPos;
+	oldTarget = targetPos;
 }
 
 void drawRoom()
@@ -82,6 +175,28 @@ void drawTable()
 
 void drawPendulum()
 {
+#ifdef LIGHTING
+	// material prameters
+	GLfloat mat_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
+	GLfloat mat_diffuse[] = { 0.1, 0.4, 0.7, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat no_shininess[] = { 0.0 };
+	GLfloat low_shininess[] = { 40.0 };
+	GLfloat high_shininess[] = { 100.0 };
+	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
+	GLfloat emission_on[] = { 0.5, 0.5, 0.5, 1.0};
+	GLfloat on[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat off[] = { 0.0, 0.0, 0.0, 1.0};
+
+
+	// material properties for pendulum base
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, low_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
+#endif
+
 	//glBindTexture(GL_TEXTURE_2D, textarray[4].textid);
 	float tmp1[] = {0.0, 0.0, 0.0, 1.0, 1.0, 1.0, 1.0, 0.0};
 	copy(begin(tmp1), std::end(tmp1), std::begin(textarray[1].textcoords));
@@ -89,6 +204,15 @@ void drawPendulum()
 	glPushMatrix();
 		drawBox(&penbase[0], vect3(0.0, 0.0, -2.6), outside);
 	glPopMatrix();
+
+#ifdef LIGHTING
+	// material properties for metal pendulum parts
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
+#endif
 
 #ifdef TEXTURE
 	glBindTexture(GL_TEXTURE_2D, textarray[5].textid);
