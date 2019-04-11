@@ -36,8 +36,8 @@ void init(void)
 #endif
 
 #ifdef TEXTURE
-	textureLoader(0, "./textures/wall.jpg");
-	textureLoader(1, "./textures/carpet.jpg");
+	textureLoader(0, "./textures/wall2.jpg");
+	textureLoader(1, "./textures/floor.jpg");
 	textureLoader(2, "./textures/ceiling.jpg");
 	textureLoader(3, "./textures/table.jpg");
 	textureLoader(4, "./textures/bluebase.jpg");
