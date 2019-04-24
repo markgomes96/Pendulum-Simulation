@@ -6,7 +6,9 @@
 
 // display.cc
 void display( void );
+void drawGraph();
 void constrainCamera( void );
+void drawSpotLight();
 void drawRoom();
 void drawTable();
 void drawPendulum();

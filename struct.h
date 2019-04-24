@@ -3,6 +3,21 @@
 
 enum outline { outside, inside, none};
 
+typedef struct gpoint
+{
+	float theta;
+	float omega;
+
+	gpoint()
+	{}
+
+	gpoint(float _theta, float _omega)
+	{
+		theta = _theta;
+		omega = _omega;
+	}
+} gpoint;
+
 typedef struct vertex
 {
 	float x;
