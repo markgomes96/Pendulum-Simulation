@@ -9,6 +9,11 @@
 void runanim(void)
 {
 	step( &t, &theta, &omega, timeStep);
+	if(kickflag)
+	{
+		kickflag = false;
+	}
+
 	//cout << "theta : " << theta << "  |  " << "omega : " << omega << endl;
 
 	// timer to store data point every physics time increment
@@ -21,7 +26,7 @@ void runanim(void)
 	else
 	{
 		timer += timeStep;
-		if(timer > 1.0)		// every 1.0 secs
+		if(timer > 0.2)		// every 1.0 secs
 		{
 			tf = true;
 		}

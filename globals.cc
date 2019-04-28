@@ -5,6 +5,10 @@
 #include "struct.h"
 #include "globals.h"
 
+// pendulum user interaction
+float kick = 20.0;
+bool kickflag = false;
+
 //dtheta/dt - theta graph
 vector<gpoint> glist;
 bool displayGraph = true;

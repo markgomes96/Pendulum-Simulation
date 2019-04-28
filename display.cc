@@ -225,6 +225,54 @@ void drawGraph()
 		drawString( gxstart-25, gystart+(gi*i)-2, GLUT_BITMAP_HELVETICA_12, charString);
 	}
 
+	// plot points in glist
+	float xgc;
+	float ygc;
+	float xgc_prev = -1.0;
+	float ygc_prev = -1.0;
+	float xgmin = -(3*M_PI)/4;
+	float xgmax = (3*M_PI)/4;
+	float ygmin = -4;
+	float ygmax = 4;
+	bool obf;
+
+	glPointSize(4.0);
+	for(int i = 0; i < glist.size(); i++)
+	{
+		obf = false;
+		xgc = gxstart+(((glist[i].theta-xgmin)/(xgmax-xgmin))*gxsize);
+		ygc = gystart+(((glist[i].omega-ygmin)/(ygmax-ygmin))*gysize);
+
+		if(xgc < gxstart || xgc > (gxstart+gxsize))
+			obf = true;
+		if(ygc < gystart || ygc > (gystart+gysize))
+			obf = true;
+
+		if(!obf)
+		{
+			// plot new point
+			glBegin( GL_POINTS );
+	    		glVertex2f ( xgc, ygc );
+	    	glEnd();
+
+			// connect new point to old point
+			if(xgc_prev > 0.0)
+			{
+				glBegin ( GL_LINES );
+					glVertex2f ( xgc_prev , ygc_prev );
+					glVertex2f ( xgc , ygc );
+				glEnd();
+			}
+
+			// record new point as prev point
+			xgc_prev = xgc;
+			ygc_prev = ygc;
+		}
+	}
+	xgc_prev = -1.0;
+	ygc_prev = -1.0;
+	glPointSize(1.0);
+
 	// draw white background (last for some unknown reason?)
 	glColor3f (1.0, 1.0, 1.0);
 	glBegin ( GL_POLYGON );

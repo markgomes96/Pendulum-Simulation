@@ -54,6 +54,11 @@ void SpecialInput(int key, int x, int y)
 
 void keyboard( unsigned char key, int x, int y )
 {
+	if ( key == 'k' || key == 'K') 		// kick pendulum movement
+	{
+		kickflag = true;
+	}
+
 	if ( key == 'g' || key == 'G') 		// toggle graph on/off
 	{
 		if(displayGraph)
@@ -61,7 +66,7 @@ void keyboard( unsigned char key, int x, int y )
 		else
 			displayGraph = true;
 	}
-	if ( key == 'g' || key == 'G') 		// clear graph data
+	if ( key == 'c' || key == 'C') 		// clear graph data
 	{
 		glist.clear();
 	}

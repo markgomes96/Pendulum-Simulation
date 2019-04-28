@@ -14,6 +14,10 @@
 
 #define DFP "datafeed"
 
+// pendulum user interaction
+extern float kick;
+extern bool kickflag;
+
 //dtheta/dt - theta graph
 extern vector<gpoint> glist;
 extern bool displayGraph;
