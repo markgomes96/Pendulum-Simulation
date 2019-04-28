@@ -14,9 +14,24 @@
 
 #define DFP "datafeed"
 
+// pendulum user interaction
+extern float kick;
+extern bool kickflag;
+
+//dtheta/dt - theta graph
+extern vector<gpoint> glist;
+extern bool displayGraph;
+extern float timer;
+extern bool tf;
+
+// testing
+//extern vect3 testPos;
+
 // lighting variables
 extern vect3 lightPos;
 extern vect3 startLP;   // ***testing variable
+extern vect3 splightPos;
+extern vect3 splightTarget;
 
 // {-x, +x, -y, +y, -z, +z}
 extern float cambounds[6];

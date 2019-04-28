@@ -1,9 +1,9 @@
 #ifndef INCLUDES
 #define INCLUDES
 
+#include <cstdlib>
 #include <vector>
 #include <cmath>
-#include <stdlib.h>
 #include <time.h>
 #include <iostream>
 #include <ctime>

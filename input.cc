@@ -54,6 +54,23 @@ void SpecialInput(int key, int x, int y)
 
 void keyboard( unsigned char key, int x, int y )
 {
+	if ( key == 'k' || key == 'K') 		// kick pendulum movement
+	{
+		kickflag = true;
+	}
+
+	if ( key == 'g' || key == 'G') 		// toggle graph on/off
+	{
+		if(displayGraph)
+			displayGraph = false;
+		else
+			displayGraph = true;
+	}
+	if ( key == 'c' || key == 'C') 		// clear graph data
+	{
+		glist.clear();
+	}
+
 	if ( key == 'w' || key == 'W') 		// move forward
 	{
 		vect3 moveVect = vectMult(vectUnit(vectDist(cameraPos, targetPos)), 0.5);
@@ -115,6 +132,31 @@ void keyboard( unsigned char key, int x, int y )
 			lightPos.y = startLP.y;
 		}
 	}
+
+	// *** pacement testing ***
+	/*
+	if ( key == 'h' || key == 'H')
+	{
+		testPos.x += 0.1;
+	}
+	if ( key == 'b' || key == 'B')
+	{
+		testPos.x -= 0.1;
+	}
+	if ( key == 'j' || key == 'J')
+	{
+		testPos.y += 0.1;
+	}
+	if ( key == 'n' || key == 'N')
+	{
+		testPos.y -= 0.1;
+	}
+	if ( key == 'p' || key == 'P')
+	{
+		cout << "Position : ( " << testPos.x << " , "
+			<< testPos.y << " , " << testPos.z << " ) " << endl;
+	}
+	*/
 
 	glutPostRedisplay();
 }

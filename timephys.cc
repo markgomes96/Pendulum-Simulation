@@ -9,6 +9,28 @@
 void runanim(void)
 {
 	step( &t, &theta, &omega, timeStep);
+	if(kickflag)
+	{
+		kickflag = false;
+	}
+
+	//cout << "theta : " << theta << "  |  " << "omega : " << omega << endl;
+
+	// timer to store data point every physics time increment
+	if(tf)
+	{
+		glist.push_back(gpoint((float)theta, (float)omega));
+		timer = 0.0;
+		tf = false;
+	}
+	else
+	{
+		timer += timeStep;
+		if(timer > 0.2)		// every 1.0 secs
+		{
+			tf = true;
+		}
+	}
 
 	weightvert.x = 3 * sin(theta);
 	weightvert.z = (3 * -cos(theta)) + 4;

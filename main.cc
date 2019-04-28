@@ -41,7 +41,7 @@ void init(void)
 	textureLoader(2, "./textures/ceiling.jpg");
 	textureLoader(3, "./textures/table.jpg");
 	textureLoader(4, "./textures/bluebase.jpg");
-	textureLoader(5, "./textures/metalpendulum.jpg");
+	textureLoader(5, "./textures/metal2.jpg");
 #endif
 
 	//*** create all my objects

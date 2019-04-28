@@ -19,20 +19,55 @@ void display(void)
 
 #ifdef LIGHTING
 	// material prameters
-	GLfloat mat_ambient[] = { 0.3, 0.3, 0.3, 1.0 };
+	GLfloat mat_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
 	GLfloat mat_diffuse[] = { 0.1, 0.5, 0.8, 1.0 };
 	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat no_shininess[] = { 0.0 };
 	GLfloat low_shininess[] = { 5.0 };
 	GLfloat high_shininess[] = { 100.0 };
 	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
 	GLfloat emission_on[] = { 0.5, 0.5, 0.5, 1.0};
-	GLfloat on[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat off[] = { 0.0, 0.0, 0.0, 1.0};
 
-	// handle lighting position
-	GLfloat position0[] = { lightPos.x, lightPos.y, lightPos.z, 1.0 };
-	glLightfv (GL_LIGHT0, GL_POSITION, position0);
+	// setup some material properties
+	glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+	glColorMaterial(GL_FRONT, GL_SPECULAR);
+
+	// draw overhead light
+	float *light0 = (float*) malloc(4*sizeof(float));
+	light0[0]= lightPos.x; light0[1] = lightPos.y; light0[2] = lightPos.z; light0[3] = 1.0;
+	glLightfv(GL_LIGHT0, GL_POSITION, light0);
+	light0[0]= 0.1; light0[1] = 0.1; light0[2] = 0.1; light0[3] = 1.0;
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light0);
+	light0[0]= 0.5; light0[1] = 0.0; light0[2]= 0.0; light0[3] = 1.0;
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light0);
+
+	// draw spotlight
+	glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 45.0);
+	glLightf(GL_LIGHT1, GL_SPOT_EXPONENT, 100.0);
+	glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.0);
+
+	// specify spotlight postion and properties
+	float *light1 = (float*) malloc(4*sizeof(float));
+	light1[0]= splightPos.x; light1[1] = splightPos.y; light1[2]= splightPos.z; light1[3] = 1.0;
+	glLightfv(GL_LIGHT1, GL_POSITION, light1);
+	light1[0]= 0.0; light1[1] = 0.0; light1[2]=0.0; light1[3] = 1.0;
+	glLightfv(GL_LIGHT1, GL_AMBIENT, light1);
+	light1[0]= 1.0; light1[1] = 1.0; light1[2]= 1.0; light1[3] = 1.0;
+	glLightfv(GL_LIGHT1, GL_DIFFUSE, light1);
+	glLightfv(GL_LIGHT1, GL_SPECULAR, light1);
+
+	// specify spotlight direction
+	vect3 splightDir = vectUnit(vectDist(splightPos, splightTarget));
+	float *direction = (float*) malloc(3*sizeof(float));
+	direction[0]= splightDir.x; direction[1] = splightDir.y; direction[2]= splightDir.z;
+	//direction[0]= -splightPos.x; direction[1] = -splightPos.y; direction[2]= -splightPos.z;
+	glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, direction);
+
+	/* Turn on Lighting */
+	glShadeModel(GL_SMOOTH);
+	glEnable(GL_COLOR_MATERIAL);
+	glEnable(GL_LIGHT0);
+	glEnable(GL_LIGHT1);
+	glEnable(GL_LIGHTING);
 #endif
 
 #ifdef TEXTURE
@@ -41,11 +76,21 @@ void display(void)
 	glEnable(GL_DEPTH_TEST);	// enable depth buffer
 
 #ifdef LIGHTING
-	// draw light position for testing
 	glDisable(GL_LIGHTING);
+	// draw overhead light position
 	glPushMatrix();
 	glColor3f(1.0, 1.0, 0.0);
 	glTranslatef( lightPos.x, lightPos.y, lightPos.z);
+	gluSphere(gluNewQuadric(),				//head
+		(GLdouble) 0.5,			//radius
+		(GLint)		10,			//slice
+		(GLint)		10 );		//stacks
+	glPopMatrix();
+
+	// draw spotlight position
+	glPushMatrix();
+	glColor3f(1.0, 0.0, 0.0);
+	glTranslatef( splightPos.x, splightPos.y, splightPos.z);
 	gluSphere(gluNewQuadric(),				//head
 		(GLdouble) 0.5,			//radius
 		(GLint)		10,			//slice
@@ -76,21 +121,179 @@ void display(void)
 
 	drawPendulum();
 
-#ifdef LIGHTING
-	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, off);
-	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  off);
-#endif
+	drawSpotLight();
 
 	showFPS();
 
+	if(displayGraph)
+		drawGraph();
+
 	glutSwapBuffers();
+
+	glDisable(GL_DEPTH_TEST);
 #ifdef TEXTURE
 	glDisable(GL_TEXTURE_2D);
 #endif
-    glDisable(GL_DEPTH_TEST);
+#ifdef LIGHTING
+	free(light0);
+	free(light1);
+	free(direction);
+	glDisable(GL_LIGHTING);
+#endif
+}
+
+void drawGraph()
+{
+	//set up 2d projection
+	glMatrixMode(GL_PROJECTION);
+	glPushMatrix();
+	glLoadIdentity();
+	gluOrtho2D(0.0, WINDOW_MAX_X, 0.0, WINDOW_MAX_Y);
+
+	//switch back to modelview to draw tex
+	glMatrixMode(GL_MODELVIEW);
+	glPushMatrix();
+	glLoadIdentity();
+
+#ifdef TEXTURE
+	glDisable(GL_TEXTURE_2D);
+#endif
+#ifdef LIGHTING
+	glDisable(GL_LIGHTING);
+#endif
+
+	float xsize = 450;	float ysize = 350;
+	float minX = WINDOW_MAX_X-xsize;   float minY = 0.0;
+	float maxX = WINDOW_MAX_X;	       float maxY = ysize;
+
+	// draw graph axis
+	glLineWidth(0.5);
+	glColor3f (0.0, 0.0, 0.0);
+	float gbx = 90;
+	float gby = 45.0;
+	glBegin ( GL_LINES );
+		// X axis
+		glVertex2f ( minX+gbx , minY+gby );
+		glVertex2f ( maxX-15 , minY+gby );
+
+		// Y axis
+		glVertex2f ( minX+gbx , minY+gby );
+		glVertex2f ( minX+gbx , maxY-15 );
+	glEnd();
+
+	// label axis and title
+	char *charString = (char*) malloc(15*sizeof(char));
+	// X axis
+	sprintf(charString, "theta");
+	drawString( minX+(xsize/2), minY+4, GLUT_BITMAP_HELVETICA_12, charString);
+	// Y axis
+	sprintf(charString, "dtheta/dt");
+	drawString( minX, minY+(ysize/2), GLUT_BITMAP_HELVETICA_12, charString);
+
+	float gxstart =	minX+gbx;		// axis starts
+	float gystart =	minY+gby;
+	float gxsize = (maxX-15)-(minX+gbx);		// axis sizes
+	float gysize = (maxY-15)-(minY+gby);
+
+	// draw grid marks
+	float ts = 5;
+	int tnum = 6;
+	float gi = gxsize/tnum;
+	string xgn[7] = {"-3PI/4","-PI/2","-PI/4","  0","PI/4","PI/2","3PI/4"};
+	for(int i = 0; i <= tnum; i++)	// x axis
+	{
+		glBegin ( GL_LINES );
+			glVertex2f ( gxstart+(gi*i) , gystart+ts );
+			glVertex2f ( gxstart+(gi*i) , gystart-ts );
+		glEnd();
+
+		sprintf(charString, "%s", xgn[i].c_str());
+		drawString( gxstart+(gi*i)-15, gystart-(ts*4), GLUT_BITMAP_HELVETICA_12, charString);
+	}
+
+	tnum = 8;
+	gi = gysize/tnum;
+	string ygn[9] = {"-4","-3","-2","-1","  0","  1","  2","  3","  4"};
+	for(int i = 0; i <= tnum; i++)	// y axis
+	{
+		glBegin ( GL_LINES );
+			glVertex2f ( gxstart+ts , gystart+(gi*i) );
+			glVertex2f ( gxstart-ts , gystart+(gi*i) );
+		glEnd();
+
+		sprintf(charString, "%s", ygn[i].c_str());
+		drawString( gxstart-25, gystart+(gi*i)-2, GLUT_BITMAP_HELVETICA_12, charString);
+	}
+
+	// plot points in glist
+	float xgc;
+	float ygc;
+	float xgc_prev = -1.0;
+	float ygc_prev = -1.0;
+	float xgmin = -(3*M_PI)/4;
+	float xgmax = (3*M_PI)/4;
+	float ygmin = -4;
+	float ygmax = 4;
+	bool obf;
+
+	glPointSize(4.0);
+	for(int i = 0; i < glist.size(); i++)
+	{
+		obf = false;
+		xgc = gxstart+(((glist[i].theta-xgmin)/(xgmax-xgmin))*gxsize);
+		ygc = gystart+(((glist[i].omega-ygmin)/(ygmax-ygmin))*gysize);
+
+		if(xgc < gxstart || xgc > (gxstart+gxsize))
+			obf = true;
+		if(ygc < gystart || ygc > (gystart+gysize))
+			obf = true;
+
+		if(!obf)
+		{
+			// plot new point
+			glBegin( GL_POINTS );
+	    		glVertex2f ( xgc, ygc );
+	    	glEnd();
+
+			// connect new point to old point
+			if(xgc_prev > 0.0)
+			{
+				glBegin ( GL_LINES );
+					glVertex2f ( xgc_prev , ygc_prev );
+					glVertex2f ( xgc , ygc );
+				glEnd();
+			}
+
+			// record new point as prev point
+			xgc_prev = xgc;
+			ygc_prev = ygc;
+		}
+	}
+	xgc_prev = -1.0;
+	ygc_prev = -1.0;
+	glPointSize(1.0);
+
+	// draw white background (last for some unknown reason?)
+	glColor3f (1.0, 1.0, 1.0);
+	glBegin ( GL_POLYGON );
+		glVertex2f ( minX , minY );
+		glVertex2f ( maxX , minY );
+		glVertex2f ( maxX , maxY );
+		glVertex2f ( minX , maxY );
+	glEnd();
+
+#ifdef TEXTURE
+	glEnable(GL_TEXTURE_2D);
+#endif
+#ifdef LIGHTING
+	glEnable(GL_LIGHTING);
+#endif
+
+	//move back to 3D space
+	glPopMatrix();
+	glMatrixMode(GL_PROJECTION);
+	glPopMatrix();
+	glMatrixMode(GL_MODELVIEW);
 }
 
 // constrains camera based camera bounds variable
@@ -127,6 +330,73 @@ void constrainCamera()
 	// record last cam and target positions
 	oldCamPos = cameraPos;
 	oldTarget = targetPos;
+}
+
+void drawSpotLight()
+{
+#ifdef LIGHTING
+	// material prameters
+	GLfloat mat_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
+	GLfloat mat_diffuse[] = { 0.1, 0.4, 0.7, 1.0 };
+	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+	GLfloat high_shininess[] = { 100.0 };
+	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
+
+	// material properties for metal pendulum parts
+	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE,   mat_diffuse);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR,  mat_specular);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_SHININESS, high_shininess);
+	glMaterialfv(GL_FRONT_AND_BACK, GL_EMISSION,  mat_emission);
+#endif
+
+#ifdef TEXTURE
+	glBindTexture(GL_TEXTURE_2D, textarray[5].textid);
+#endif
+
+	// Draw the vertical pole of pendulum
+	GLUquadric* quad = gluNewQuadric();
+
+#ifdef TEXTURE
+	gluQuadricTexture(quad, true);       		//Default: false
+	glColor3f (1.0, 1.0, 1.0);
+#else
+
+	glColor3f(0.0, 1.0, 0.0);
+#endif
+
+	glPushMatrix();
+		glTranslatef(-9.8, -9.2, -6.0);
+		gluCylinder(quad,
+		    (GLdouble) 0.2,		//base radius
+		    (GLdouble) 0.2,		//top radius
+		    (GLdouble) 10.0,		//hieght
+		    (GLint)    15,		//slices
+		    (GLint)    30 );		//stacks
+	glPopMatrix();
+
+	// Draw the horizontal pole of pendulum
+	quad = gluNewQuadric();
+
+#ifdef TEXTURE
+	gluQuadricTexture(quad, true);       		//Default: false
+	glColor3f (1.0, 1.0, 1.0);
+#else
+
+	glColor3f(0.0, 1.0, 0.0);
+#endif
+
+	glPushMatrix();
+		glRotatef(75, 1, 0, 0);
+		glRotatef(135, 0, 1, 0);
+		glTranslatef(0.0, 1.0, -14.0);
+		gluCylinder(quad,
+		    (GLdouble) 0.3,		//base radius
+		    (GLdouble) 1.2,		//top radius
+		    (GLdouble) 1.8,		//hieght
+		    (GLint)    15,		//slices
+		    (GLint)    30 );		//stacks
+	glPopMatrix();
 }
 
 void drawRoom()
@@ -177,17 +447,12 @@ void drawPendulum()
 {
 #ifdef LIGHTING
 	// material prameters
-	GLfloat mat_ambient[] = { 0.4, 0.4, 0.4, 1.0 };
+	GLfloat mat_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
 	GLfloat mat_diffuse[] = { 0.1, 0.4, 0.7, 1.0 };
 	GLfloat mat_specular[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat no_shininess[] = { 0.0 };
 	GLfloat low_shininess[] = { 40.0 };
 	GLfloat high_shininess[] = { 100.0 };
 	GLfloat mat_emission[] = {0.3, 0.2, 0.2, 0.0};
-	GLfloat emission_on[] = { 0.5, 0.5, 0.5, 1.0};
-	GLfloat on[] = { 1.0, 1.0, 1.0, 1.0 };
-	GLfloat off[] = { 0.0, 0.0, 0.0, 1.0};
-
 
 	// material properties for pendulum base
 	glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT,   mat_ambient);
