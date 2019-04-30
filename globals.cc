@@ -6,7 +6,7 @@
 #include "globals.h"
 
 // pendulum user interaction
-float kick = 20.0;
+float kick = 15.0;
 bool kickflag = false;
 
 //dtheta/dt - theta graph
